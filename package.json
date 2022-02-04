@@ -1,0 +1,31 @@
+{
+    "name": "research-to-commutity",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "license": "MIT",
+    "scripts": {
+        "cleanup": "rimraf .cache dist build --public-url",
+        "start": "yarn cleanup && parcel -p 3000 ./public/index.html --open --no-autoinstall",
+        "build": "yarn cleanup && parcel build ./public/index.html -d --public-url ./ --no-minify --no-source-maps"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.0.0-0",
+        "@babel/plugin-transform-runtime": "^7.17.0",
+        "@babel/preset-env": "^7.16.11",
+        "@babel/preset-react": "^7.16.7",
+        "@babel/preset-typescript": "^7.16.7",
+        "@types/react": "^15.0.0 || ^16.0.0 || ^17.0.0 ",
+        "@types/react-dom": "^17.0.11",
+        "@types/react-router-dom": "^5.3.3",
+        "@types/styled-components": "^5.1.21",
+        "axios": "^0.25.0",
+        "parcel-bundler": "^1.12.5",
+        "react": "^15.0.0 || ^16.0.0 || ^17.0.0 ",
+        "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 ",
+        "react-hot-loader": "^4.13.0",
+        "react-router-dom": "^6.2.1",
+        "styled-components": "^5.3.3",
+        "styled-reset": "^4.3.4",
+        "typescript": "^4.5.5"
+    }
+}
