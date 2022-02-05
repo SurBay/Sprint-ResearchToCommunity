@@ -21,6 +21,7 @@
         "axios": "^0.25.0",
         "parcel-bundler": "^1.12.5",
         "react": "^15.0.0 || ^16.0.0 || ^17.0.0 ",
+        "react-cookie": "^4.1.1",
         "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 ",
         "react-hot-loader": "^4.13.0",
         "react-router-dom": "^6.2.1",
