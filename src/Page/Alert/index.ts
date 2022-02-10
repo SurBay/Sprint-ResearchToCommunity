@@ -1,2 +1,2 @@
-import Alert from "./Alert";
-export default Alert;
+export * from "./InvalidAddressAlert";
+export * from "./NonMobileConnectionAlert";

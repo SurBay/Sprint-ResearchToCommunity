@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { Cookies } from "react-cookie";
 import { initializeKakaoSDK } from "../Util/kakao.util";
 import { isUserConnectOnMobile } from "../Util/environment";
+import { ChildrenProp } from "../Type";
 
 type AppContextProp = {
     userEmail: string | undefined;
@@ -18,7 +19,7 @@ export function useAppContext() {
     return useContext(AppContext);
 }
 
-export default function AppProvider({ children }: { children: JSX.Element }) {
+export default function AppProvider({ children }: ChildrenProp) {
     const cookies = new Cookies();
     const [userEmail, setUserEmail] = useState<string | undefined>(undefined);
     const [connectOnMobile, setConnectOnMobile] = useState<boolean>(true);

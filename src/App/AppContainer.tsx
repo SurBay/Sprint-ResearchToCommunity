@@ -2,9 +2,10 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAppContext } from "./AppProvider";
 import styled from "styled-components";
-import Alert from "../Page/Alert";
-import VoteDetail from "../Page/VoteDetail";
-import { KakaoOatuhRedirect } from "../Auth";
+import { InvalidAddressAlert, NonMobileConnectionAlert } from "../Page/Alert";
+import VoteList from "../Page/Vote/Vote_List";
+import VoteDetail from "../Page/Vote/Vote__Detail";
+import { KakaoOatuhRedirect } from "../Page/Auth";
 import { FullPage } from "../Style";
 
 export default function AppContainer() {
@@ -13,7 +14,11 @@ export default function AppContainer() {
     return (
         <BrowserRouter>
             <Container>
-                {connectOnMobile ? <MainRouter /> : <Alert />}
+                {connectOnMobile ? (
+                    <MainRouter />
+                ) : (
+                    <NonMobileConnectionAlert />
+                )}
             </Container>
         </BrowserRouter>
     );
@@ -23,9 +28,10 @@ function MainRouter() {
     return (
         <>
             <Routes>
-                <Route path="/" element={<VoteDetail />} />
+                <Route path="/" element={<VoteList />} />
+                <Route path="/vote/:id" element={<VoteDetail />} />
                 <Route path="/kakao-oauth" element={<KakaoOatuhRedirect />} />
-                <Route path="/*" element={<>This address is not available</>} />
+                <Route path="/*" element={<InvalidAddressAlert />} />
             </Routes>
         </>
     );
