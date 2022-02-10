@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import { useVoteListContext } from "./VoteListProvider";
-import { FullPage } from "../../../Style";
+import { FullFlexPage } from "../../../Style";
+import { Link } from "react-router-dom";
 
 export default function VoteListContainer() {
     const [params] = useSearchParams();
@@ -40,7 +41,11 @@ function VoteListBody() {
         <VoteListBodyContainer>
             {displayingVotes.map((vote) => {
                 return (
-                    <VoteContainer key={vote._id}>{vote.content}</VoteContainer>
+                    <VoteContainer key={vote._id}>
+                        <Link to={`/vote`} state={vote}>
+                            {vote.content}
+                        </Link>
+                    </VoteContainer>
                 );
             })}
         </VoteListBodyContainer>

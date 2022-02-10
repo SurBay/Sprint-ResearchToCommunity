@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { VoteProp, ChildrenProp } from "../../../Type";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAppContext } from "../../../App/AppProvider";
+import { RedirectedVoteIdProp, VoteProp, ChildrenProp } from "../../../Type";
 
 type VoteListContextProp = {
     displayingVotes: VoteProp[];
@@ -51,10 +53,30 @@ export default function VoteListProvider({ children }: ChildrenProp) {
             author: "작성자",
         },
     ];
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { firstVisitFlag } = useAppContext();
     const [displayingVotes, setDisplayingVotes] =
         useState<VoteProp[]>(initialVotes);
     const [selectedVoteId, setSelectedVoteId] = useState<string | null>(null);
+
+    ///////////////////////////////////////////////////////
+
+    // 처음 접속했을 때만 사용
+    useEffect(() => {
+        if (firstVisitFlag) {
+            // LandingPageRedirector에서 발신
+            const redirectedVoteId = location.state as RedirectedVoteIdProp;
+            if (redirectedVoteId && redirectedVoteId.voteId) {
+                navigate("/vote", {
+                    state: { voteId: redirectedVoteId.voteId },
+                });
+            }
+        }
+        return () => {};
+    }, []);
+
+    ///////////////////////////////////////////////////////
 
     const voteListContext = {
         displayingVotes,

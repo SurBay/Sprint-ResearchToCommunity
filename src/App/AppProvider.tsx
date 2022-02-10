@@ -6,12 +6,16 @@ import { ChildrenProp } from "../Type";
 
 type AppContextProp = {
     userEmail: string | undefined;
+    firstVisitFlag: boolean;
     connectOnMobile: boolean;
+    setFirstVisitFlag: (state: boolean) => void;
 };
 
 const InitialAppContext: AppContextProp = {
     userEmail: undefined,
+    firstVisitFlag: true,
     connectOnMobile: true,
+    setFirstVisitFlag: () => {},
 };
 
 const AppContext = createContext(InitialAppContext);
@@ -22,6 +26,7 @@ export function useAppContext() {
 export default function AppProvider({ children }: ChildrenProp) {
     const cookies = new Cookies();
     const [userEmail, setUserEmail] = useState<string | undefined>(undefined);
+    const [firstVisitFlag, setFirstVisitFlag] = useState<boolean>(true);
     const [connectOnMobile, setConnectOnMobile] = useState<boolean>(true);
 
     useEffect(() => {
@@ -40,7 +45,9 @@ export default function AppProvider({ children }: ChildrenProp) {
 
     const appContext = {
         userEmail,
+        firstVisitFlag,
         connectOnMobile,
+        setFirstVisitFlag,
     };
 
     return (

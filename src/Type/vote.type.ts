@@ -1,3 +1,8 @@
+// 처음 접속했을 때 리다이렉트하면서 넘겨주는 state
+export type RedirectedVoteIdProp = {
+    voteId: string;
+};
+
 export type ReplyProp = {};
 
 export type VoteCommentProp = {
