@@ -5,14 +5,10 @@ import { RedirectedVoteIdProp, VoteProp, ChildrenProp } from "../../../Type";
 
 type VoteListContextProp = {
     displayingVotes: VoteProp[];
-    selectedVoteId: string | null;
-    setSelectedVoteId: (voteId: string | null) => void;
 };
 
 const InitialVoteListContext: VoteListContextProp = {
     displayingVotes: [],
-    selectedVoteId: "",
-    setSelectedVoteId: () => {},
 };
 
 const VoteListContext = createContext(InitialVoteListContext);
@@ -58,7 +54,6 @@ export default function VoteListProvider({ children }: ChildrenProp) {
     const { firstVisitFlag } = useAppContext();
     const [displayingVotes, setDisplayingVotes] =
         useState<VoteProp[]>(initialVotes);
-    const [selectedVoteId, setSelectedVoteId] = useState<string | null>(null);
 
     ///////////////////////////////////////////////////////
 
@@ -80,8 +75,6 @@ export default function VoteListProvider({ children }: ChildrenProp) {
 
     const voteListContext = {
         displayingVotes,
-        selectedVoteId,
-        setSelectedVoteId,
     };
 
     return (

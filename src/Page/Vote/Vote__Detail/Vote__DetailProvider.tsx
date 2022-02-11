@@ -37,17 +37,18 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         const vote = location.state as RedirectedVoteIdProp | VoteProp;
         // url을 수기로 쳐서 들어온 경우
         if (!vote) {
-            navigate("/");
+            navigate("/", { replace: true });
+        } else {
+            // 처음 접속하여 홈 화면에서 리다이렉트된 경우
+            if ("voteId" in vote) {
+                setFirstVisitFlag(false);
+            }
+            // 홈 화면에서 버튼을 눌러 들어온 경우
+            else {
+                setVote(vote);
+            }
         }
 
-        // 처음 접속하여 홈 화면에서 리다이렉트된 경우
-        if ("voteId" in vote) {
-            setFirstVisitFlag(false);
-        }
-        // 홈 화면에서 버튼을 눌러 들어온 경우
-        else {
-            setVote(vote);
-        }
         return () => {};
     }, []);
 

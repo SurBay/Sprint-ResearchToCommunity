@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import {
-    FullBlockPage,
+    FullBlockHeaderPage,
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
     StylelessButton,
@@ -85,13 +85,14 @@ function VoteDetailOther() {
     );
 }
 
-const Container = styled(FullBlockPage)``;
+const Container = styled(FullBlockHeaderPage)``;
 
 // Header 부분
 const VoteDetailHeaderContainer = styled(FlexSpaceBetweenDiv)`
     height: 60px;
     border: 2px solid blue;
     padding: 0px 12px;
+    margin-bottom: 40px;
 `;
 
 const VoteAuthorProfileContainer = styled(FlexCenteringDiv)``;

@@ -1,2 +1,3 @@
-export * from "./StyledComponents/Button";
-export * from "./StyledComponents/Page";
+export * from "./StyledComponents/button.styledComponents";
+export * from "./StyledComponents/header.styledComponents";
+export * from "./StyledComponents/page.styledComponents";

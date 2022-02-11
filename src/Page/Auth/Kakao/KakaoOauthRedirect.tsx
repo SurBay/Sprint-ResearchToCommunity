@@ -15,7 +15,6 @@ export function KakaoOatuhRedirect() {
             setEmailFromKakakoAccount(code);
         } else {
             console.log("URL 인자를 읽을 수 없습니다 :");
-            console.dir(params);
         }
 
         return;
