@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export const FullFlexHeaderPage = styled.div`
+export const FullFlexHeaderPageDiv = styled.div`
     display: flex;
     width: 100%;
     ${(props) => `height: calc(100% - ${props.theme.headerHeight})`};
 `;
 
-export const FullBlockHeaderPage = styled.div`
+export const FullBlockHeaderPageDiv = styled.div`
     display: block;
     width: 100%;
     ${(props) => `height: calc(100% - ${props.theme.headerHegith})`};

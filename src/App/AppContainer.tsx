@@ -14,31 +14,13 @@ import { FullFlexDiv, FullBlockDiv } from "../Style";
 export default function AppContainer() {
     const { connectOnMobile } = useAppContext();
 
+    if (!connectOnMobile) return <NonMobileConnectionAlert />;
+
     return (
         <BrowserRouter>
-            <OutestContainer>
-                <Container>
-                    <Header />
-                    <MainRouter />
-                </Container>
-                {/* <Modal /> */}
-            </OutestContainer>
+            <MainRouter />
+            <ModalRotuer />
         </BrowserRouter>
-        // <>
-        //     {connectOnMobile ? (
-        //         <BrowserRouter>
-        //             <OutestContainer>
-        //                 <Container>
-        //                     <Header />
-        //                     <MainRouter />
-        //                 </Container>
-        //                 <Modal />
-        //             </OutestContainer>
-        //         </BrowserRouter>
-        //     ) : (
-        //         <NonMobileConnectionAlert />
-        //     )}
-        // </>
     );
 }
 
@@ -46,7 +28,8 @@ function MainRouter() {
     const location = useLocation();
 
     return (
-        <>
+        <Container>
+            <Header />
             <Routes>
                 <Route path="/" element={<VoteList />} />
                 <Route path="/vote" element={<VoteDetail />} />
@@ -54,12 +37,47 @@ function MainRouter() {
                 <Route path="/redirect" element={<LandingPageRedirector />} />
                 <Route path="/*" element={<InvalidAddressAlert />} />
             </Routes>
-        </>
+        </Container>
     );
 }
 
-const OutestContainer = styled(FullFlexDiv)`
-    position: relative;
-`;
+function ModalRotuer() {
+    const { modalType, setModalType } = useAppContext();
+
+    if (!modalType) return null;
+
+    return (
+        <ModalOuterContainer>
+            <ModalInnerContainer>
+                <ModalBackground
+                    className={"ModalBackground"}
+                    onClick={() => {
+                        setModalType(null);
+                    }}
+                />
+                <Modal />
+            </ModalInnerContainer>
+        </ModalOuterContainer>
+    );
+}
 
 const Container = styled(FullBlockDiv)``;
+
+const ModalOuterContainer = styled(FullFlexDiv)`
+    position: absolute;
+    top: 0px;
+`;
+
+const ModalInnerContainer = styled(FullFlexDiv)`
+    position: relative;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ModalBackground = styled(FullFlexDiv)`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+`;

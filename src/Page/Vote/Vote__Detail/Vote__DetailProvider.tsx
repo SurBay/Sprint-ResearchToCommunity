@@ -3,7 +3,6 @@ import React, {
     createContext,
     useContext,
     useState,
-    useRef,
     useEffect,
     RefObject,
 } from "react";
@@ -14,7 +13,6 @@ import { RedirectedVoteIdProp, VoteProp, ChildrenProp } from "../../../Type";
 
 type VoteDetailContextProp = {
     vote: VoteProp | null;
-    containerRef?: RefObject<HTMLDivElement>;
 };
 
 const InitialVoteDetailContext: VoteDetailContextProp = {
@@ -31,7 +29,6 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
     const navigate = useNavigate();
     const { setFirstVisitFlag } = useAppContext();
     const [vote, setVote] = useState<VoteProp | null>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const vote = location.state as RedirectedVoteIdProp | VoteProp;
@@ -71,7 +68,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         }
     }
 
-    const voteDetailContext = { vote, containerRef };
+    const voteDetailContext = { vote };
 
     return (
         <VoteDetailContext.Provider value={voteDetailContext}>

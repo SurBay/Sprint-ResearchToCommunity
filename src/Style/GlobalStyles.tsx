@@ -12,6 +12,9 @@ const GlobalStyles = createGlobalStyle`
         height:100vh;
         overflow:hidden;   
     }
+    #root{
+        position:relative;
+    }
 `;
 
 export default GlobalStyles;

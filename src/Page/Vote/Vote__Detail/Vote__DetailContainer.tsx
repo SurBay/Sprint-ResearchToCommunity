@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../../App/AppProvider";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import {
-    FullBlockHeaderPage,
+    FullBlockHeaderPageDiv,
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
     StylelessButton,
@@ -35,6 +36,7 @@ function VoteDetailHeader() {
 }
 // Body 부분 (투표 제목, 투표 내용, 참여기간, 선택지, 선택 버튼)
 function VoteDetailBody() {
+    const { setModalType } = useAppContext();
     const { vote } = useVoteDetailContext();
 
     return (
@@ -49,7 +51,13 @@ function VoteDetailBody() {
             <VoteOption />
             <VoteOption />
             <VoteSubmitButtonRow>
-                <VoteSubmitButton>투표하기</VoteSubmitButton>
+                <VoteSubmitButton
+                    onClick={() => {
+                        setModalType("REQUEST_KAKAO_OR_EMAIL");
+                    }}
+                >
+                    투표하기
+                </VoteSubmitButton>
             </VoteSubmitButtonRow>
         </VoteDetailBodyContainer>
     );
@@ -85,7 +93,7 @@ function VoteDetailOther() {
     );
 }
 
-const Container = styled(FullBlockHeaderPage)``;
+const Container = styled(FullBlockHeaderPageDiv)``;
 
 // Header 부분
 const VoteDetailHeaderContainer = styled(FlexSpaceBetweenDiv)`

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Link, useSearchParams } from "react-router-dom";
 import { useVoteListContext } from "./VoteListProvider";
 import {
-    FullBlockHeaderPage,
-    FullFlexHeaderPage,
+    FullBlockHeaderPageDiv,
+    FullFlexHeaderPageDiv,
     FullFlexDiv,
     FullBlockDiv,
 } from "../../../Style";
@@ -37,7 +37,7 @@ function VoteListBody() {
     );
 }
 
-const Container = styled(FullFlexHeaderPage)`
+const Container = styled(FullFlexHeaderPageDiv)`
     /* overflow: hidden; */
     border: 2px solid black;
 `;
