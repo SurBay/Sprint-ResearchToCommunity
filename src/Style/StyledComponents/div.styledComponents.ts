@@ -3,13 +3,19 @@ import styled from "styled-components";
 export const FullFlexHeaderPageDiv = styled.div`
     display: flex;
     width: 100%;
-    ${(props) => `height: calc(100% - ${props.theme.headerHeight})`};
+    ${(props) => `max-height: calc(100% - ${props.theme.headerHeight})`};
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    // Firefox
+    scrollbar-width: none;
+    // Chrome, Safari, Opera
+    -webkit-scrollbar {
+        display: none;
+    }
 `;
 
-export const FullBlockHeaderPageDiv = styled.div`
+export const FullBlockHeaderPageDiv = styled(FullFlexHeaderPageDiv)`
     display: block;
-    width: 100%;
-    ${(props) => `height: calc(100% - ${props.theme.headerHegith})`};
     /* > div {
         margin: 0px auto;
     } */
@@ -21,10 +27,8 @@ export const FullFlexDiv = styled.div`
     height: 100%;
 `;
 
-export const FullBlockDiv = styled.div`
+export const FullBlockDiv = styled(FullFlexDiv)`
     display: block;
-    width: 100%;
-    height: 100%;
     /* > div {
         margin: 0px auto;
     } */

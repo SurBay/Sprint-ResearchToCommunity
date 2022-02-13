@@ -4,14 +4,21 @@ export const Theme = {
     // header
     headerColor: Color.mainTheme,
 
-    // button
+    // div - color
+    voteDoneBackgroundColor: Color.doneTagBackgroundGray,
+    hotTagColor: Color.mainTheme,
+
+    // button - color
     voteButtonBackgroundColor: Color.mainTheme,
     emailSubmitButtonBackgroundColor: Color.mainTheme,
 
-    // text
+    // text - color
     emphasizedTextColor: Color.mainTheme,
 
+    // input - color
+    emailUnavailableColor: Color.unavailableRed,
+    emailAvailableColor: Color.availableGreen,
+
     // lengths
-    headerHeight: "45px",
-    voteListHeaderHeight: "45px",
+    headerHeight: "50px",
 };

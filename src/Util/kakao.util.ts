@@ -45,10 +45,10 @@ export function sendKakaoFeedMessage() {
 }
 
 // getKakaoAccessToken()과 getKakaoAccountInfo()를 순차적으로 실행
-// 결과적으로 code를 카카오계정 정보와 교환함
+// 결과적으로 code를 카카오 사용자 정보와 교환함
 export async function getKakaoUserInfoFromCode(
     code: string
-): Promise<KakaoAccount | null> {
+): Promise<KakaoUserInfo | null> {
     const access_token = await getKakaoAccessToken(code);
     if (access_token) {
         return await getKakaoAccountInfo(access_token);
@@ -96,33 +96,22 @@ async function getKakaoAccessToken(code: string) {
     return access_token;
 }
 
-type getKakaoAccountInfoReturnDto = {
-    success: boolean;
-    kakao_account: KakaoAccount;
-};
-
 // Access Token 을 이용하여 카카오 계정 정보를 얻어옴.
 // 이 부분은 브라우저를 이용한 스크립트 실행이 막혀있으므로 backend를 이용해야 함.
 async function getKakaoAccountInfo(
     access_token: string
-): Promise<KakaoAccount | null> {
-    let kakao_account = null;
-    await axios
-        .get<getKakaoAccountInfoReturnDto>(
-            `${API_ENDPOINT}/api/temp-user/kakao-account`,
-            {
-                headers: {
-                    access_token: access_token,
-                },
-            }
-        )
+): Promise<KakaoUserInfo | null> {
+    return await axios
+        .get<KakaoUserInfo>(`${API_ENDPOINT}/api/temp-user/kakao-account`, {
+            headers: {
+                access_token: access_token,
+            },
+        })
         .then((res) => {
-            if (res.data.success) {
-                kakao_account = res.data.kakao_account;
-            }
+            return res.data;
         })
         .catch((error) => {
             handleAxiosError(error, getKakaoAccountInfo.name);
+            return null;
         });
-    return kakao_account;
 }

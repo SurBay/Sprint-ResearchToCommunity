@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useAppContext } from "../../../App/AppProvider";
 import { getKakaoUserInfoFromCode } from "../../../Util/kakao.util";
 
 // 카카오 로그인 후 리다이렉트 되는 페이지
@@ -21,9 +22,9 @@ export function KakaoOatuhRedirect() {
     }, []);
 
     async function setEmailFromKakakoAccount(code: string) {
-        const kakao_account = await getKakaoUserInfoFromCode(code);
-        if (kakao_account && kakao_account.email) {
-            setUserEmail(kakao_account.email);
+        const kakaoUserInfo = await getKakaoUserInfoFromCode(code);
+        if (kakaoUserInfo && kakaoUserInfo.kakao_account.email) {
+            setUserEmail(kakaoUserInfo.kakao_account.email);
         }
     }
 

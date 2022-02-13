@@ -1,75 +1,133 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useAppContext } from "../../App/AppProvider";
+import { KakaoOauthRedirectWrapper } from "../Kakao.component";
+import { KAKAO_OAUTH_REQUST_URL } from "../../Constant";
 import { DefaultModalDiv, StylelessButton, DefaultInput } from "../../Style";
 
 export default function RequestKakaoOrEmailModal() {
-    const [emailInput, setEmailInput] = useState<string>("");
     const [selectUseEmail, setSelectUseEmail] = useState<boolean>(false);
+    const [emailInput, setEmailInput] = useState<string>("");
+    const [emailAvailable, setEmailAvailable] = useState<boolean>(false);
 
     return (
         <Container selectUseEmail={selectUseEmail}>
-            {/* 가이드 텍스트 */}
-            <GuideTextDiv>
-                <GuideText>이메일을 입력하시면</GuideText>
-                <br />
-                <EmphasizedGuideText>내가 투표한 내역</EmphasizedGuideText>
-                <GuideText>을</GuideText>
-                <br />
-                <GuideText>모아볼 수 있어요!</GuideText>
-            </GuideTextDiv>
+            {/* (공통) 가이드 텍스트 */}
+            <GuideTextPart />
             {!selectUseEmail ? (
                 <>
                     {/* 모달 처음 열었을 때 */}
                     {/* 샘플 이미지 */}
-                    <SampleImageDiv></SampleImageDiv>
-
+                    <SampleImagePart />
                     {/* 로그인 옵션 선택 */}
-                    <SelectOptionsDiv>
-                        <SelectKakaoLoginButton>
-                            카카오로 3초만에 시작하기
-                        </SelectKakaoLoginButton>
-
-                        <SelectUseEmailTextRow>
-                            <SelectUseEmailText
-                                onClick={() => {
-                                    setSelectUseEmail(true);
-                                }}
-                            >
-                                이메일 이용하기
-                            </SelectUseEmailText>
-                        </SelectUseEmailTextRow>
-
-                        <SelectLaterOptionTextRow>
-                            <SelectLaterOptionText>
-                                다음에 저장할게요
-                            </SelectLaterOptionText>
-                        </SelectLaterOptionTextRow>
-                    </SelectOptionsDiv>
+                    <LoginOptionSelectPart
+                        setSelectUseEmail={setSelectUseEmail}
+                    />
                 </>
             ) : (
                 <>
                     {/* 이메일로 로그인 선택시*/}
-                    <EmailSubmitDiv>
-                        <EmailInput
-                            type="email"
-                            value={emailInput}
-                            onChange={(e) => {
-                                setEmailInput(e.target.value);
-                            }}
-                            placeholder={"이메일을 입력해주세요"}
-                        />
-                        <EmailAvailableMessageRow>
-                            <EmailAvailableMessage>
-                                {` 사용할 수 없는 이메일 주소입니다`}
-                            </EmailAvailableMessage>
-                        </EmailAvailableMessageRow>
-                        <EmailSubmitButtonRow>
-                            <EmailSubmitButton>완료하기</EmailSubmitButton>
-                        </EmailSubmitButtonRow>
-                    </EmailSubmitDiv>
+                    <EmailInputPart
+                        emailInput={emailInput}
+                        emailAvailable={emailAvailable}
+                        setEmailInput={setEmailInput}
+                    />
                 </>
             )}
         </Container>
+    );
+}
+
+function GuideTextPart() {
+    return (
+        <GuideTextDiv>
+            <GuideText>이메일을 입력하시면</GuideText>
+            <br />
+            <EmphasizedGuideText>내가 투표한 내역</EmphasizedGuideText>
+            <GuideText>을</GuideText>
+            <br />
+            <GuideText>모아볼 수 있어요!</GuideText>
+        </GuideTextDiv>
+    );
+}
+
+function SampleImagePart() {
+    return <SampleImageDiv></SampleImageDiv>;
+}
+
+function LoginOptionSelectPart({
+    setSelectUseEmail,
+}: {
+    setSelectUseEmail: (state: boolean) => void;
+}) {
+    const { setModalType } = useAppContext();
+
+    return (
+        <SelectOptionsDiv>
+            <KakaoOauthRedirectWrapper>
+                <SelectKakaoLoginButton>
+                    카카오로 3초만에 시작하기
+                </SelectKakaoLoginButton>
+            </KakaoOauthRedirectWrapper>
+
+            <SelectUseEmailTextRow>
+                <SelectUseEmailText
+                    onClick={() => {
+                        setSelectUseEmail(true);
+                    }}
+                >
+                    이메일 이용하기
+                </SelectUseEmailText>
+            </SelectUseEmailTextRow>
+
+            <SelectLaterOptionTextRow>
+                <SelectLaterOptionText
+                    onClick={() => {
+                        setModalType(null);
+                    }}
+                >
+                    다음에 저장할게요
+                </SelectLaterOptionText>
+            </SelectLaterOptionTextRow>
+        </SelectOptionsDiv>
+    );
+}
+
+function EmailInputPart({
+    emailInput,
+    emailAvailable,
+    setEmailInput,
+}: {
+    emailInput: string;
+    emailAvailable: boolean;
+    setEmailInput: (input: string) => void;
+}) {
+    return (
+        <EmailSubmitDiv>
+            <EmailInput
+                type="email"
+                value={emailInput}
+                emailInput={emailInput}
+                emailAvailable={emailAvailable}
+                onChange={(e) => {
+                    setEmailInput(e.target.value);
+                }}
+                placeholder={"이메일을 입력해주세요"}
+            />
+            <EmailAvailableMessageRow>
+                <EmailAvailableMessage
+                    emailInput={emailInput}
+                    emailAvailable={emailAvailable}
+                >
+                    {emailAvailable
+                        ? ` 사용가능합니다`
+                        : ` 사용할 수 없는 이메일 주소입니다`}
+                </EmailAvailableMessage>
+            </EmailAvailableMessageRow>
+            <EmailSubmitButtonRow>
+                <EmailSubmitButton>완료하기</EmailSubmitButton>
+            </EmailSubmitButtonRow>
+        </EmailSubmitDiv>
     );
 }
 
@@ -121,14 +179,16 @@ const SelectKakaoLoginButton = styled.div`
     align-items: center;
     height: 55px;
     font-size: 15px;
+    color: black;
     background-color: yellow;
     border-radius: 12px;
-    margin-bottom: 5vw;
+    margin-bottom: 18px;
+    cursor: pointer;
 `;
 
 const SelectUseEmailTextRow = styled(SubContainerRow)`
     justify-content: center;
-    margin-bottom: 9vw;
+    margin-bottom: 28px;
 `;
 
 const SelectUseEmailText = styled.span`
@@ -152,12 +212,20 @@ const SelectLaterOptionText = styled.span`
 // 이메일로 로그인 선택시
 const EmailSubmitDiv = styled(SubContainer)``;
 
-const EmailInput = styled(DefaultInput)`
+const EmailInput = styled(DefaultInput)<{
+    emailInput: string;
+    emailAvailable: boolean;
+}>`
     width: 100%;
     height: 50px;
     font-size: 13px;
     padding: 0px 18px;
-    border: 1px solid gray;
+    border: 2px solid
+        ${(props) =>
+            props.emailAvailable
+                ? props.theme.emailAvailableColor
+                : props.theme.emailUnavailableColor};
+    ${(props) => props.emailInput == "" && `border: 1px solid gray;`}
     border-radius: 12px;
     margin-bottom: 5px;
 `;
@@ -167,8 +235,16 @@ const EmailAvailableMessageRow = styled.div`
     margin-bottom: 40px;
 `;
 
-const EmailAvailableMessage = styled.span`
+const EmailAvailableMessage = styled.span<{
+    emailInput: string;
+    emailAvailable: boolean;
+}>`
+    ${(props) => props.emailInput == "" && `visibility:hidden;`}
     font-size: 12px;
+    color: ${(props) =>
+        props.emailAvailable
+            ? props.theme.emailAvailableColor
+            : props.theme.emailUnavailableColor};
 `;
 
 const EmailSubmitButtonRow = styled(SubContainerRow)`

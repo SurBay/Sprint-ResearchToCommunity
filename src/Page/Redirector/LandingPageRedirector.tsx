@@ -6,9 +6,14 @@ export function LandingPageRedirector() {
     const [params] = useSearchParams();
 
     useEffect(() => {
-        navigate("/", { replace: true, state: { voteId: "123123" } });
+        const redirectVoteId = params.get("vote-id");
+        if (redirectVoteId) {
+            navigate("/", { replace: true, state: "123123" });
+        } else {
+            navigate("/", { replace: true });
+        }
         return () => {};
     }, []);
 
-    return <>리다이렉트 페이지입니다.</>;
+    return <></>;
 }
