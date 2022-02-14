@@ -1,11 +1,17 @@
 import axios from "axios";
 import { handleAxiosError } from "../Axios/axios.error";
-import { AccessTokenResponse, KakaoAccount, KakaoUserInfo } from "../Type";
-import { API_ENDPOINT, SERVICE_URL } from "../Constant";
+import {
+    AccessTokenResponse,
+    KakaoAccount,
+    KakaoUserInfo,
+    VoteProp,
+} from "../Type";
 import {
     KAKAO_JAVASCRIPT_KEY,
     KAKAO_REST_API_KEY,
-} from "../Constant/kakao.constant";
+    API_ENDPOINT,
+    SERVICE_URL,
+} from "../Constant";
 
 // #!declare #!declare global
 // 아래 구문은 index.tsx 에서 window Interface 를 global 하게 정의했기에 가능함
@@ -17,27 +23,27 @@ export function initializeKakaoSDK() {
 }
 
 // button의 onClick 리스너에 포함 => sendDefault에 구성된 내용에 따라 카드형태의 공유 메세지 전송
-export function sendKakaoFeedMessage() {
-    const sharedURL = location.href;
+export function sendKakaoFeedMessage(vote: VoteProp) {
+    const sharingURL = `${SERVICE_URL}/redirect?vote-id=${vote._id}`;
 
     Kakao.Link.sendDefault({
         objectType: "feed",
         content: {
-            title: "선글라스 무한 증식시키기",
-            description: "넋 놓고 보게 되는 선글라스 짤을 무한으로 즐기세요",
+            title: vote.title,
+            description: vote.content,
             imageUrl:
-                "https://theawesomedaily.com/wp-content/uploads/2020/04/puts-on-sunglasses-feat-1-1.jpg",
+                "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdeveloper.mozilla.org%2Fko%2Fdocs%2FWeb%2FHTML%2FElement%2Fimg&psig=AOvVaw3Lps6Q8gCSEI1POizNre7r&ust=1644889731694000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKD0jvOJ_vUCFQAAAAAdAAAAABAD",
             link: {
-                webUrl: sharedURL,
-                mobileWebUrl: sharedURL,
+                webUrl: sharingURL,
+                mobileWebUrl: sharingURL,
             },
         },
         buttons: [
             {
-                title: "나도 증식시키기",
+                title: "나의 선택은?",
                 link: {
-                    webUrl: sharedURL,
-                    mobileWebUrl: sharedURL,
+                    webUrl: sharingURL,
+                    mobileWebUrl: sharingURL,
                 },
             },
         ],
@@ -102,7 +108,7 @@ async function getKakaoAccountInfo(
     access_token: string
 ): Promise<KakaoUserInfo | null> {
     return await axios
-        .get<KakaoUserInfo>(`${API_ENDPOINT}/api/temp-user/kakao-account`, {
+        .get<KakaoUserInfo>(`${API_ENDPOINT}/api/temp-users/kakao-account`, {
             headers: {
                 access_token: access_token,
             },

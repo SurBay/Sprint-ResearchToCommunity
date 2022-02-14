@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useAppContext } from "../../../App/AppProvider";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
-import VoteDetailSelectOption from "./Component/Vote__Detail__SelectOption";
+import VoteDetailSelect from "./Component/Vote__Detail__Select";
+import VoteDetailResult from "./Component/Vote__Detail__Result";
+import { hasAlreadyVoted } from "../../../Util";
 import {
     FullBlockHeaderPageDiv,
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
-    StylelessButton,
 } from "../../../Style";
-
-import { PollProp } from "../../../Type";
+import { useNavigate } from "react-router-dom";
 
 export default function VoteDetailContainer() {
     return (
@@ -24,18 +23,14 @@ export default function VoteDetailContainer() {
     );
 }
 
-const Scroll = styled.div`
-    overflow-y: auto;
-`;
-
 // Header 부분 (작성자 정보, 공유하기 버튼)
 function VoteDetailHeader() {
-    const { vote } = useVoteDetailContext();
+    const { selectedVote } = useAppContext();
     return (
         <VoteDetailHeaderContainer>
             <VoteAuthorProfileContainer>
                 <div>작성자 사진</div>
-                <span>{vote?.author}</span>
+                <span>{selectedVote.author}</span>
             </VoteAuthorProfileContainer>
             <div>공유하기</div>
         </VoteDetailHeaderContainer>
@@ -43,40 +38,28 @@ function VoteDetailHeader() {
 }
 // Body 부분 (투표 제목, 투표 내용, 참여기간, 선택지, 선택 버튼)
 function VoteDetailBody() {
-    const { setModalType } = useAppContext();
-    const { vote } = useVoteDetailContext();
+    const { tempUserInfo, selectedVote } = useAppContext();
+    const [alreadyVoted, setAlreadyVoted] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (hasAlreadyVoted(tempUserInfo, selectedVote._id)) {
+            setAlreadyVoted(true);
+        }
+        return;
+    }, [tempUserInfo, selectedVote]);
 
     return (
         <VoteDetailBodyContainer>
-            <VoteTitle>{vote?.title}</VoteTitle>
+            <VoteTitle>{selectedVote.title}</VoteTitle>
             <br />
-            <VoteContent>{vote?.content}</VoteContent>
+            <VoteContent>{selectedVote.content}</VoteContent>
             <br />
             <VoteDurationTitle>참여기간</VoteDurationTitle>
             <VoteDurationDate>2022.02.06 ~ 2022.02.13</VoteDurationDate>
-            {vote?.polls.map((poll, index) => {
-                return (
-                    <VoteDetailSelectOption
-                        key={`${index}:${poll.content}`}
-                        poll={poll}
-                    />
-                );
-            })}
-            <VoteSubmitButtonRow>
-                <VoteSubmitButton
-                    onClick={() => {
-                        setModalType("REQUEST_KAKAO_OR_EMAIL");
-                    }}
-                >
-                    투표하기
-                </VoteSubmitButton>
-            </VoteSubmitButtonRow>
+            {alreadyVoted ? <VoteDetailResult /> : <VoteDetailSelect />}
         </VoteDetailBodyContainer>
     );
 }
-
-// Body__선택지 부분
-// Vote__Detail__SelectOption.tsx 참조
 
 // Footer 부분 (참여인원/좋아요)
 function VoteDetailFooter() {
@@ -90,6 +73,8 @@ function VoteDetailFooter() {
 
 // 다른 투표 둘러보기
 function VoteDetailOther() {
+    const navigate = useNavigate();
+    const { adjoiningVotes } = useVoteDetailContext();
     return (
         <VoteDetailOtherContainer>
             <SeeOtherVoteText>다른 투표 둘러보기</SeeOtherVoteText>
@@ -101,13 +86,27 @@ function VoteDetailOther() {
             </OtherVoteRow>
             <OtherVoteRow>
                 <OtherVoteTag>이전</OtherVoteTag>
-                <OtherVoteTitle>
-                    뭐가 더 드러운 것 같아요? 아침에 샤워하기 vs 저녁에 샤워하기{" "}
+                <OtherVoteTitle
+                    onClick={() => {
+                        if (adjoiningVotes[0]._id) {
+                            navigate("/vote", { state: adjoiningVotes[0]._id });
+                        }
+                    }}
+                >
+                    {adjoiningVotes[0].title}
                 </OtherVoteTitle>
             </OtherVoteRow>
             <OtherVoteRow>
                 <OtherVoteTag>다음</OtherVoteTag>
-                <OtherVoteTitle>(다음 글이 없습니다)</OtherVoteTitle>
+                <OtherVoteTitle
+                    onClick={() => {
+                        if (adjoiningVotes[1]._id) {
+                            navigate("/vote", { state: adjoiningVotes[1]._id });
+                        }
+                    }}
+                >
+                    {adjoiningVotes[1].title}
+                </OtherVoteTitle>
             </OtherVoteRow>
         </VoteDetailOtherContainer>
     );
@@ -151,19 +150,6 @@ const VoteDurationDate = styled.span`
 `;
 
 const VoteAllowDuplicateCheckText = styled.span``;
-
-// Body__선택지 부분
-
-const VoteSubmitButtonRow = styled(FlexCenteringDiv)``;
-
-const VoteSubmitButton = styled(StylelessButton)`
-    width: 94%;
-    height: 60px;
-    color: white;
-    background-color: ${(props) => props.theme.voteButtonBackgroundColor};
-    border-radius: 12px;
-    margin: auto;
-`;
 
 // Footer 부분
 const VoteDetailFooterContainer = styled.div`
@@ -212,6 +198,7 @@ const OtherVoteTitle = styled(FlexCenteringDiv)`
     justify-content: flex-start;
     max-width: calc(100% - 70px);
     padding: 0px 12px;
+    cursor: pointer;
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;

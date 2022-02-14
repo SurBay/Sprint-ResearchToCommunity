@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAppContext } from "../../App/AppProvider";
 import { KakaoOauthRedirectWrapper } from "../Kakao.component";
-import { KAKAO_OAUTH_REQUST_URL } from "../../Constant";
+import { isValidEmail, isUniqueEmail } from "../../Util";
 import { DefaultModalDiv, StylelessButton, DefaultInput } from "../../Style";
 
 export default function RequestKakaoOrEmailModal() {
     const [selectUseEmail, setSelectUseEmail] = useState<boolean>(false);
-    const [emailInput, setEmailInput] = useState<string>("");
-    const [emailAvailable, setEmailAvailable] = useState<boolean>(false);
 
     return (
         <Container selectUseEmail={selectUseEmail}>
@@ -27,11 +25,7 @@ export default function RequestKakaoOrEmailModal() {
             ) : (
                 <>
                     {/* 이메일로 로그인 선택시*/}
-                    <EmailInputPart
-                        emailInput={emailInput}
-                        emailAvailable={emailAvailable}
-                        setEmailInput={setEmailInput}
-                    />
+                    <EmailInputPart />
                 </>
             )}
         </Container>
@@ -93,15 +87,10 @@ function LoginOptionSelectPart({
     );
 }
 
-function EmailInputPart({
-    emailInput,
-    emailAvailable,
-    setEmailInput,
-}: {
-    emailInput: string;
-    emailAvailable: boolean;
-    setEmailInput: (input: string) => void;
-}) {
+function EmailInputPart() {
+    const [emailInput, setEmailInput] = useState<string>("");
+    const [emailAvailable, setEmailAvailable] = useState<boolean>(false);
+
     return (
         <EmailSubmitDiv>
             <EmailInput
@@ -109,8 +98,14 @@ function EmailInputPart({
                 value={emailInput}
                 emailInput={emailInput}
                 emailAvailable={emailAvailable}
-                onChange={(e) => {
+                onChange={async (e) => {
+                    setEmailAvailable(false);
                     setEmailInput(e.target.value);
+                    if (isValidEmail(e.target.value)) {
+                        if (await isUniqueEmail(e.target.value)) {
+                            setEmailAvailable(true);
+                        }
+                    }
                 }}
                 placeholder={"이메일을 입력해주세요"}
             />
@@ -125,7 +120,9 @@ function EmailInputPart({
                 </EmailAvailableMessage>
             </EmailAvailableMessageRow>
             <EmailSubmitButtonRow>
-                <EmailSubmitButton>완료하기</EmailSubmitButton>
+                <EmailSubmitButton disabled={!emailAvailable}>
+                    완료하기
+                </EmailSubmitButton>
             </EmailSubmitButtonRow>
         </EmailSubmitDiv>
     );
@@ -225,7 +222,7 @@ const EmailInput = styled(DefaultInput)<{
             props.emailAvailable
                 ? props.theme.emailAvailableColor
                 : props.theme.emailUnavailableColor};
-    ${(props) => props.emailInput == "" && `border: 1px solid gray;`}
+    ${(props) => !props.emailInput && `border: 1px solid gray;`}
     border-radius: 12px;
     margin-bottom: 5px;
 `;
@@ -239,7 +236,7 @@ const EmailAvailableMessage = styled.span<{
     emailInput: string;
     emailAvailable: boolean;
 }>`
-    ${(props) => props.emailInput == "" && `visibility:hidden;`}
+    ${(props) => !props.emailInput && `visibility:hidden;`}
     font-size: 12px;
     color: ${(props) =>
         props.emailAvailable
@@ -259,4 +256,7 @@ const EmailSubmitButton = styled(StylelessButton)`
     background-color: ${(props) =>
         props.theme.emailSubmitButtonBackgroundColor};
     border-radius: 25px;
+    :disabled {
+        background-color: gray;
+    }
 `;

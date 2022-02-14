@@ -9,7 +9,8 @@ export const Theme = {
     hotTagColor: Color.mainTheme,
 
     // button - color
-    voteButtonBackgroundColor: Color.mainTheme,
+    voteOptionSelectedBorderColor: Color.mainTheme,
+    voteSubmitButtonBackgroundColor: Color.mainTheme,
     emailSubmitButtonBackgroundColor: Color.mainTheme,
 
     // text - color

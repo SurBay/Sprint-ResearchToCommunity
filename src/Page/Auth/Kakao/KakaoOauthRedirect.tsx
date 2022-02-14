@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppContext } from "../../../App/AppProvider";
-import { getKakaoUserInfoFromCode } from "../../../Util/kakao.util";
+import { getKakaoUserInfoFromCode } from "../../../Util";
 
 // 카카오 로그인 후 리다이렉트 되는 페이지
 // TODO: url 통해 받은 code로 계정 정보 수신하고 나면 원래 보던 투표 페이지로 리다이렉트 시켜야 함

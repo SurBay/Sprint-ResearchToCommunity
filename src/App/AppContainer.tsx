@@ -5,7 +5,7 @@ import { useAppContext } from "./AppProvider";
 import Header from "../Component/Header";
 import Modal from "../Component/Modal";
 import { InvalidAddressAlert, NonMobileConnectionAlert } from "../Page/Alert";
-import VoteList from "../Page/Vote/Vote_List";
+import VoteList from "../Page/Vote/Vote__List";
 import VoteDetail from "../Page/Vote/Vote__Detail";
 import { KakaoOatuhRedirect } from "../Page/Auth";
 import { LandingPageRedirector } from "../Page/Redirector";
