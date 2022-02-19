@@ -4,7 +4,7 @@ import { handleAxiosError } from "../Axios/axios.error";
 
 export function isValidEmail(emailInput: string) {
     const emailRegex =
-        /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@([0-9a-zA-Z])*[.][a-zA-Z]{2,}/;
+        /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@([0-9a-zA-Z])*[.][a-zA-Z]{2,}([.][a-zA-Z]{2,})?/;
     return emailRegex.test(emailInput);
 }
 

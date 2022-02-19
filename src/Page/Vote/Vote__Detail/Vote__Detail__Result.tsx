@@ -1,17 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { useAppContext } from "../../../../App/AppProvider";
-import { useVoteDetailContext } from "../Vote__DetailProvider";
-import { sendKakaoFeedMessage } from "../../../../Util";
-import { PollProp } from "../../../../Type";
+import { useVoteDetailContext } from "./Vote__DetailProvider";
+import { sendKakaoFeedMessage } from "../../../Util";
+import { PollProp } from "../../../Type";
 import {
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
     StylelessButton,
-} from "../../../../Style";
+} from "../../../Style";
 
 export default function VoteDetailResult() {
-    const { selectedVote } = useAppContext();
+    const { selectedVote } = useVoteDetailContext();
 
     return (
         <Container>

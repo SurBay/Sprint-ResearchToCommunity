@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAppContext } from "../../../App/AppProvider";
 import { useVoteListContext } from "./VoteListProvider";
+import VoteListPageHeader from "../../../Component/Header/VoteListPageHeader";
 import {
     FullBlockHeaderPageDiv,
     FullFlexHeaderPageDiv,
@@ -23,11 +24,14 @@ export default function VoteListContainer() {
     const {} = useVoteListContext();
 
     return (
-        <Container>
-            <HotVote />
-            <RecentVote />
-            <InifiniteScrollPart />
-        </Container>
+        <>
+            <VoteListPageHeader />
+            <Container>
+                <HotVote />
+                <RecentVote />
+                <InifiniteScrollPart />
+            </Container>
+        </>
     );
 }
 
@@ -72,7 +76,7 @@ function VoteEach({
     showAuthor: boolean;
 }) {
     return (
-        <Link to={`/vote`} state={vote._id}>
+        <Link to={`/vote/${vote._id}`}>
             <VoteContainer>
                 <VoteTitleRow>
                     <VoteTitleLeft>

@@ -1,29 +1,36 @@
-import React, {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    RefObject,
-} from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Cookies } from "react-cookie";
 import { useAppContext } from "../../../App/AppProvider";
-import { API_ENDPOINT } from "../../../Constant";
-import { VoteProp, ChildrenProp } from "../../../Type";
-import { handleAxiosError } from "../../../Axios/axios.error";
+import {
+    VoteProp,
+    AdjoiningVoteProp,
+    initialVote,
+    initialAdjoiningVoteProp,
+    ChildrenProp,
+    TempUserProp,
+} from "../../../Type";
 
 type VoteDetailContextProp = {
-    adjoiningVotes: { _id: string; title: string }[];
+    selectedVote: VoteProp;
+    prevVote: AdjoiningVoteProp;
+    nextVote: AdjoiningVoteProp;
     selectedOptions: number[];
-    submitVote: () => void;
+    modalOpened: boolean;
     toggleVoteOption: (optionIndex: number) => void;
+    submitVote: () => void;
+    closeModal: () => void;
 };
 
 const InitialVoteDetailContext: VoteDetailContextProp = {
-    adjoiningVotes: [],
+    selectedVote: initialVote,
+    prevVote: initialAdjoiningVoteProp,
+    nextVote: initialAdjoiningVoteProp,
     selectedOptions: [],
-    submitVote: () => {},
+    modalOpened: false,
     toggleVoteOption: () => {},
+    submitVote: () => {},
+    closeModal: () => {},
 };
 
 const VoteDetailContext = createContext(InitialVoteDetailContext);
@@ -32,54 +39,76 @@ export function useVoteDetailContext() {
 }
 
 export default function VoteDetailProvider({ children }: ChildrenProp) {
-    const location = useLocation();
+    const { voteId } = useParams();
     const navigate = useNavigate();
+    const cookies = new Cookies();
     const {
         tempUserInfo,
-        recentVotes,
-        selectedVote,
         allVote,
-        setModalType,
-        setSelectedVote,
-        loadVote,
+        allVoteLoaded,
         updateUserVoteParticipationInfo,
         updateVoteParticipatedUserInfo,
     } = useAppContext();
-    const [adjoiningVotes, setAdjoiningVotes] = useState<
-        { _id: string; title: string }[]
-    >([
-        { _id: "", title: "" },
-        { _id: "", title: "" },
-    ]);
+    const [selectedVote, setSelectedVote] = useState<VoteProp>(initialVote);
     const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+    const [prevVote, setPrevVote] = useState<AdjoiningVoteProp>(
+        initialAdjoiningVoteProp
+    );
+    const [nextVote, setNextVote] = useState<AdjoiningVoteProp>(
+        initialAdjoiningVoteProp
+    );
+    const [modalOpened, setModalOpened] = useState<boolean>(false);
 
     useEffect(() => {
-        const voteId = location.state as string;
         if (!voteId) {
-            // url을 수기로 쳐서 들어온 경우 튕겨냄
+            // voteId가 없는 경우 튕겨냄
             navigate("/", { replace: true });
-        } else {
-            getVoteDetail(voteId);
-            getAdjoiningVotes(voteId);
         }
 
         return () => {};
-    }, [recentVotes]);
+    }, []);
+
+    // 선택한 투표 정보 및 인접한 투표 정보 로드:
+    // allVote 데이터가 이미 모든 투표 정보를 가져왔으므로 재활용
+    // 단, allVote를 가져오는 행위는 비동기이므로
+    // 의존성 배열에 allVote가 로드 되었는지 확인하는 플래그를 포함시켜야 함
+    useEffect(() => {
+        if (voteId) {
+            getVoteDetail(voteId);
+        }
+    }, [allVoteLoaded, voteId]);
 
     // 선택한 투표 세부정보 로드
-    async function getVoteDetail(voteId: string) {
-        await axios
-            .get<VoteProp>(`${API_ENDPOINT}/api/votes/${voteId}`)
-            .then((res) => {
-                setSelectedVote(res.data);
-            })
-            .catch((error) => {
-                handleAxiosError(error, getVoteDetail.name);
-                navigate("/", { replace: true });
-            });
+    function getVoteDetail(voteId: string) {
+        // allVote가 이미 모든 정보를 가지고 있으므로 백엔드 호출은 최소화
+        if (!allVote?.current) return;
+
+        const index = allVote.current.findIndex((vote) => {
+            return vote._id == voteId;
+        });
+
+        if (index == -1) return;
+
+        setSelectedVote(allVote.current[index]);
+        setAdjoiningVotes(index);
     }
 
-    // 투표 선지 선택
+    // 인접한 투표 정보 로드
+    function setAdjoiningVotes(index: number) {
+        if (!allVote?.current) return;
+        const prevVote = {
+            _id: allVote.current[index + 1]._id || "",
+            title: allVote.current[index + 1].title || "(이전 글이 없습니다)",
+        };
+        const nextVote = {
+            _id: allVote.current[index - 1]._id || "",
+            title: allVote.current[index - 1].title || "(다음 글이 없습니다)",
+        };
+        setPrevVote(prevVote);
+        setNextVote(nextVote);
+    }
+
+    // 투표 상세 페이지에서 선지 선택
     function toggleVoteOption(optionIndex: number) {
         // 이미 선택한 경우
         if (selectedOptions.includes(optionIndex)) {
@@ -107,53 +136,68 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         }
     }
 
-    // 투표 참여: 로그인 되어있다면 서버와 통신하고 로컬 데이터 변경
-    // 로그인 되지 않았다면 로그인 요구 모달창 띄움
+    // 투표 참여:
+    // 로그인 되어있다면 서버와 통신하고 로컬 데이터 변경
+    // *로컬 데이터: 사용자 정보, 선택한 투표 정보, 전체 투표 정보, 최근 투표 정보
+    // 로그인 되지 않았다면 쿠키에 투표 참여 정보 저장하고 로그인 요구 모달창 띄움
     function submitVote() {
         if (tempUserInfo.email || tempUserInfo.kakaoId) {
             // TODO: axios call
-            updateUserVoteParticipationInfo();
-            updateVoteParticipatedUserInfo(selectedOptions);
+            const updatedSelectedVote = updateAndReturnSelectedVote();
+            updateUserVoteParticipationInfo(updatedSelectedVote._id);
+            updateVoteParticipatedUserInfo(updatedSelectedVote);
         } else {
-            setModalType("REQUEST_KAKAO_OR_EMAIL");
+            saveParticipatingVoteInfo();
+            setModalOpened(true);
         }
     }
 
-    // 이전, 다음글 정보
-    function getAdjoiningVotes(voteId: string) {
-        const index = recentVotes.findIndex((vote) => vote._id == voteId);
-        if (index == -1) {
-            // 처음 로드한 10개의 recentVote에 리다이렉트된 투표가 없다면:
-            // recentVote를 더 불러온다. loadVote()는 recentVotes를 바꾸기 때문에
-            // getAdjoiningVotes() 함수가 다시 실행된다
-            loadVote();
-        } else {
-            const previousVote = recentVotes[index + 1] || {
-                _id: "",
-                title: "(이전 글이 없습니다)",
-            };
-            const nextVote = recentVotes[index - 1] || {
-                _id: "",
-                title: "(다음 글이 없습니다)",
-            };
-            setAdjoiningVotes([
-                {
-                    _id: previousVote._id,
-                    title: previousVote.title,
-                },
-                {
-                    _id: nextVote._id,
-                    title: nextVote.title,
-                },
-            ]);
+    // 투표 참여: selectedVote에 user 정보 추가하고 반환
+    function updateAndReturnSelectedVote() {
+        const updatedSelectedVote = { ...selectedVote };
+        if (tempUserInfo.kakaoId) {
+            // 카카오톡으로 로그인 한 경우
+            selectedOptions.forEach((optionIndex) => {
+                updatedSelectedVote.polls[
+                    optionIndex
+                ].participatedTempUserKakaoIds.push(tempUserInfo.kakaoId);
+            });
+            setSelectedVote(updatedSelectedVote);
+            return updatedSelectedVote;
         }
+
+        if (tempUserInfo.email) {
+            // 이메일로 로그인 한 경우
+            selectedOptions.forEach((optionIndex) => {
+                updatedSelectedVote.polls[
+                    optionIndex
+                ].participatedTempUserEmails.push(tempUserInfo.email);
+            });
+            setSelectedVote(updatedSelectedVote);
+            return updatedSelectedVote;
+        }
+        return updatedSelectedVote;
+    }
+
+    function saveParticipatingVoteInfo() {
+        console.log(`비로그인 유저 투표 참여 정보를 저장합니다`);
+        cookies.set("reservedVoteId", selectedVote._id);
+        cookies.set("reservedSelectedOptions", selectedOptions);
+    }
+
+    function closeModal() {
+        setModalOpened(false);
     }
 
     const voteDetailContext = {
-        adjoiningVotes,
+        selectedVote,
+        prevVote,
+        nextVote,
         selectedOptions,
-        submitVote,
+        modalOpened,
         toggleVoteOption,
+        submitVote,
+        closeModal,
     };
 
     return (

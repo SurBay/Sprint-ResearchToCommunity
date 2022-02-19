@@ -2,7 +2,7 @@
 // typescript에서 enum을 사용하는 것이 성능적으로 손해라고 함. 자세한 내용은 위 링크 참조.
 
 const ModalType = {
-    REQUEST_KAKAO_OR_EMAIL: "REQUEST_KAKAO_OR_EMAIL",
+    REQUEST_SIGNUP: "REQUEST_SIGNUP",
 } as const;
 
 export type ModalType = typeof ModalType[keyof typeof ModalType];

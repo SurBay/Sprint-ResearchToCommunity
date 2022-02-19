@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useAppContext } from "../../App/AppProvider";
-import { KakaoOauthRedirectWrapper } from "../Kakao.component";
+import { useVoteDetailContext } from "../../Page/Vote/Vote__Detail/Vote__DetailProvider";
+import { useRequestSignupModalContext } from "./RequestSignupModalProvider";
+import { KakaoOauthRedirectWrapper } from "../../Component/Kakao.component";
 import { isValidEmail, isUniqueEmail } from "../../Util";
 import { DefaultModalDiv, StylelessButton, DefaultInput } from "../../Style";
 
-export default function RequestKakaoOrEmailModal() {
-    const [selectUseEmail, setSelectUseEmail] = useState<boolean>(false);
+export default function RequestSignupModalContainer() {
+    const { selectUseEmail } = useRequestSignupModalContext();
 
     return (
         <Container selectUseEmail={selectUseEmail}>
@@ -18,9 +19,7 @@ export default function RequestKakaoOrEmailModal() {
                     {/* 샘플 이미지 */}
                     <SampleImagePart />
                     {/* 로그인 옵션 선택 */}
-                    <LoginOptionSelectPart
-                        setSelectUseEmail={setSelectUseEmail}
-                    />
+                    <LoginOptionSelectPart />
                 </>
             ) : (
                 <>
@@ -49,12 +48,10 @@ function SampleImagePart() {
     return <SampleImageDiv></SampleImageDiv>;
 }
 
-function LoginOptionSelectPart({
-    setSelectUseEmail,
-}: {
-    setSelectUseEmail: (state: boolean) => void;
-}) {
-    const { setModalType } = useAppContext();
+function LoginOptionSelectPart() {
+    const { closeModal } = useVoteDetailContext();
+    const { setSelectUseEmail, saveParticipatingVoteInfo } =
+        useRequestSignupModalContext();
 
     return (
         <SelectOptionsDiv>
@@ -77,7 +74,7 @@ function LoginOptionSelectPart({
             <SelectLaterOptionTextRow>
                 <SelectLaterOptionText
                     onClick={() => {
-                        setModalType(null);
+                        closeModal();
                     }}
                 >
                     다음에 저장할게요
@@ -88,8 +85,11 @@ function LoginOptionSelectPart({
 }
 
 function EmailInputPart() {
+    const { submitVote, closeModal } = useVoteDetailContext();
+    const { handleEmailSignup } = useRequestSignupModalContext();
     const [emailInput, setEmailInput] = useState<string>("");
     const [emailAvailable, setEmailAvailable] = useState<boolean>(false);
+    const [signingUp, setSigningUp] = useState<boolean>(false);
 
     return (
         <EmailSubmitDiv>
@@ -120,7 +120,18 @@ function EmailInputPart() {
                 </EmailAvailableMessage>
             </EmailAvailableMessageRow>
             <EmailSubmitButtonRow>
-                <EmailSubmitButton disabled={!emailAvailable}>
+                <EmailSubmitButton
+                    disabled={!emailAvailable || signingUp}
+                    onClick={async () => {
+                        setSigningUp(true);
+                        if (!(await handleEmailSignup(emailInput))) {
+                            // 회원가입 실패시
+                            setSigningUp(false);
+                        }
+                        submitVote();
+                        closeModal();
+                    }}
+                >
                     완료하기
                 </EmailSubmitButton>
             </EmailSubmitButtonRow>

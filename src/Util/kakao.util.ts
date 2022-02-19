@@ -4,6 +4,7 @@ import {
     AccessTokenResponse,
     KakaoAccount,
     KakaoUserInfo,
+    TempUserProp,
     VoteProp,
 } from "../Type";
 import {
@@ -57,7 +58,7 @@ export async function getKakaoUserInfoFromCode(
 ): Promise<KakaoUserInfo | null> {
     const access_token = await getKakaoAccessToken(code);
     if (access_token) {
-        return await getKakaoAccountInfo(access_token);
+        return await getKakaoUserInfoByAccessToken(access_token);
     }
     return null;
 }
@@ -104,7 +105,7 @@ async function getKakaoAccessToken(code: string) {
 
 // Access Token 을 이용하여 카카오 계정 정보를 얻어옴.
 // 이 부분은 브라우저를 이용한 스크립트 실행이 막혀있으므로 backend를 이용해야 함.
-async function getKakaoAccountInfo(
+async function getKakaoUserInfoByAccessToken(
     access_token: string
 ): Promise<KakaoUserInfo | null> {
     return await axios
@@ -117,7 +118,43 @@ async function getKakaoAccountInfo(
             return res.data;
         })
         .catch((error) => {
-            handleAxiosError(error, getKakaoAccountInfo.name);
+            handleAxiosError(error, getKakaoUserInfoByAccessToken.name);
+            return null;
+        });
+}
+
+export async function getTempUserInfoByKakaoId(
+    kakaoId: string
+): Promise<TempUserProp | null> {
+    return await axios
+        .get<TempUserProp | null>(
+            `${API_ENDPOINT}/api/temp-users?kakaoId=${kakaoId}`
+        )
+        .then((res) => {
+            return res.data;
+        })
+        .catch((error) => {
+            handleAxiosError(error, getTempUserInfoByKakaoId.name);
+            return null;
+        });
+}
+
+export async function signupWithKakaoUserInfo(
+    kakaoUserInfo: KakaoUserInfo
+): Promise<TempUserProp | null> {
+    return await axios
+        .post<TempUserProp | null>(
+            `${API_ENDPOINT}/api/temp-users/signup-kakao`,
+            {
+                email: kakaoUserInfo.kakao_account?.email,
+                kakaoId: kakaoUserInfo.id,
+            }
+        )
+        .then((res) => {
+            return res.data;
+        })
+        .catch((error) => {
+            handleAxiosError(error, signupWithKakaoUserInfo.name);
             return null;
         });
 }

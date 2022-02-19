@@ -18,6 +18,13 @@ export type PollProp = {
     image?: string; //이미지 url
 };
 
+const initialPoll: PollProp = {
+    content: "",
+    participants_userids: [],
+    participatedTempUserEmails: [],
+    participatedTempUserKakaoIds: [],
+};
+
 export type VoteProp = {
     _id: string;
     title: string; //제목
@@ -48,8 +55,18 @@ export const initialVote: VoteProp = {
     author_userid: "", //작성자 email
     multi_response: false, //복수 응답 가능 여부
     participants_userids: [], //참여한 유저 email
-    polls: [], //설문 항목들
+    polls: [initialPoll], //설문 항목들
     liked_users: [], //좋아요 누른 유저들(이메일)
     hide: false,
     visit: 0,
+};
+
+export type AdjoiningVoteProp = {
+    _id: string;
+    title: string;
+};
+
+export const initialAdjoiningVoteProp: AdjoiningVoteProp = {
+    _id: "",
+    title: "",
 };

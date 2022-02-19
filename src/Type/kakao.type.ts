@@ -36,5 +36,5 @@ export type KakaoAccount = {
 
 export type KakaoUserInfo = {
     id: number;
-    kakao_account: KakaoAccount;
+    kakao_account?: KakaoAccount;
 };

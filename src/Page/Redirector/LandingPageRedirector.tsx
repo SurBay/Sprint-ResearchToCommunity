@@ -6,9 +6,9 @@ export function LandingPageRedirector() {
     const [params] = useSearchParams();
 
     useEffect(() => {
-        const redirectVoteId = params.get("vote-id");
+        const redirectVoteId = params.get("voteId");
         if (redirectVoteId) {
-            navigate("/", { replace: true, state: "123123" });
+            navigate("/", { replace: true, state: redirectVoteId });
         } else {
             navigate("/", { replace: true });
         }

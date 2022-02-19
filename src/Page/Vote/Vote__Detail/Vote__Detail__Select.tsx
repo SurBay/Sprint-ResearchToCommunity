@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useAppContext } from "../../../../App/AppProvider";
-import { useVoteDetailContext } from "../Vote__DetailProvider";
-import { FlexSpaceBetweenDiv, StylelessButton } from "../../../../Style";
-import { PollProp } from "../../../../Type";
+import { useVoteDetailContext } from "./Vote__DetailProvider";
+import { FlexSpaceBetweenDiv, StylelessButton } from "../../../Style";
+import { PollProp } from "../../../Type";
 
 export default function VoteDetailSelect() {
-    const { selectedVote, setModalType } = useAppContext();
-    const { selectedOptions, submitVote } = useVoteDetailContext();
+    const { selectedVote, selectedOptions, submitVote } =
+        useVoteDetailContext();
 
     return (
         <Container>

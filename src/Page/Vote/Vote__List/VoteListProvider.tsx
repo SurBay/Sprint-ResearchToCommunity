@@ -21,12 +21,10 @@ export default function VoteListProvider({ children }: ChildrenProp) {
     useEffect(() => {
         if (firstVisitFlag) {
             setFirstVisitFlag(false);
-            // LandingPageRedirector에서 발신
+            // LandingPageRedirector에서 보내준 state
             const redirectedVoteId = location.state as string;
             if (redirectedVoteId) {
-                navigate("/vote", {
-                    state: redirectedVoteId,
-                });
+                navigate(`/vote/${redirectedVoteId}`);
             }
         }
         return () => {};
