@@ -6,6 +6,13 @@
   query = {code = ":code"}
 
 [[redirects]]
+  from = "*"
+  to = "redirect"
+  status = 200
+  force = true
+  query = {voteId = ":voteId"}
+
+[[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/"
   status = 200

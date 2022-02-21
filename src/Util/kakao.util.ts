@@ -24,7 +24,9 @@ export function initializeKakaoSDK() {
 
 // button의 onClick 리스너에 포함 => sendDefault에 구성된 내용에 따라 카드형태의 공유 메세지 전송
 export function sendKakaoFeedMessage(vote: VoteProp) {
-    const sharingURL = `${SERVICE_URL}/redirect?vote-id=${vote._id}`;
+    // BEFORE PUBLISH:
+    // const sharingURL = `http://localhost:3000/redirect?voteId=${vote._id}`;
+    const sharingURL = `https://surbay-sprint.netlify.app/redirect?voteId=${vote._id}`;
 
     Kakao.Link.sendDefault({
         objectType: "feed",
