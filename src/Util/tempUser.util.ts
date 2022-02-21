@@ -8,10 +8,14 @@ export async function signup(
     kakaoId?: string
 ): Promise<TempUserProp | null> {
     return await axios
-        .post<TempUserProp | null>(`${API_ENDPOINT}/api/temp-users/signup`, {
-            email,
-            kakaoId,
-        })
+        .post<TempUserProp | null>(
+            `${API_ENDPOINT}/api/temp-users/signup`,
+            {
+                email,
+                kakaoId,
+            },
+            { withCredentials: true }
+        )
         .then((res) => {
             return res.data;
         })

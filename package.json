@@ -4,9 +4,9 @@
     "main": "index.ts",
     "license": "MIT",
     "scripts": {
-        "cleanup": "rimraf .cache dist build --public-url",
+        "cleanup": "rimraf .cache dist build",
         "start": "yarn cleanup && parcel -p 3000 ./public/index.html --open --no-autoinstall",
-        "build": "yarn cleanup && parcel build ./public/index.html -d --public-url ./ --no-minify --no-source-maps"
+        "build": "yarn cleanup && parcel build ./public/index.html -d dist ./ --no-minify --no-source-maps"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0-0",

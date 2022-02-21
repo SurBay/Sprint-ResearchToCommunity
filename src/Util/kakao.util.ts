@@ -91,6 +91,7 @@ async function getKakaoAccessToken(code: string) {
                     "Content-type":
                         "application/x-www-form-urlencoded;charset=utf-8",
                 },
+                withCredentials: true,
             }
         )
         .then((response) => {
@@ -114,6 +115,7 @@ async function getKakaoUserInfoByAccessToken(
                 headers: {
                     access_token: access_token,
                 },
+                withCredentials: true,
             }
         )
         .then((res) => {
@@ -130,7 +132,8 @@ export async function getTempUserInfoByKakaoId(
 ): Promise<TempUserProp | null> {
     return await axios
         .get<TempUserProp | null>(
-            `${API_ENDPOINT}/api/temp-users?kakaoId=${kakaoId}`
+            `${API_ENDPOINT}/api/temp-users?kakaoId=${kakaoId}`,
+            { withCredentials: true }
         )
         .then((res) => {
             return res.data;
@@ -150,7 +153,8 @@ export async function signupWithKakaoUserInfo(
             {
                 email: kakaoUserInfo.kakao_account?.email,
                 kakaoId: kakaoUserInfo.id,
-            }
+            },
+            { withCredentials: true }
         )
         .then((res) => {
             return res.data;

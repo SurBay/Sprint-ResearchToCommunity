@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-// import "./Font/font.css";
+import "./Font/fonts.css";
 
 const GlobalStyles = createGlobalStyle`
     ${reset};
@@ -14,6 +14,9 @@ const GlobalStyles = createGlobalStyle`
     }
     #root{
         position:relative;
+    }
+    #root * {
+        font-family:"SpoqaHanSansNeo";
     }
 `;
 
