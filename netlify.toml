@@ -1,9 +1,11 @@
 [[redirects]]
   from = "*"
   to = "/kakao-oauth"
+  status = 200
+  force = true
   query = {code = ":code"}
 
 [[redirects]]
   from = "/*"
-  to = "/"
+  to = "/index.html"
   status = 200
