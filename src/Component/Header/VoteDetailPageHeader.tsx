@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { DefaultHeaderContainer } from "../../Style";
+import { StylelessLink, SvgIcon, DefaultHeaderContainer } from "../../Style";
+import ProfileIcon from "../../Resource/svg/profile-icon.svg";
 
 export default function VoteDetailPageHeader() {
     const navigate = useNavigate();
@@ -13,8 +14,8 @@ export default function VoteDetailPageHeader() {
                     navigate(-1);
                 }}
             >{`<`}</BackArrowButton>
-            <span>voteboat</span>
-            <MyPageButton>프로필</MyPageButton>
+            <StylelessLink to={"/"}>voteboat</StylelessLink>
+            <SvgIcon src={ProfileIcon} width={"24px"} />
         </Container>
     );
 }
@@ -28,9 +29,5 @@ const Container = styled(DefaultHeaderContainer)`
 `;
 
 const BackArrowButton = styled.div`
-    cursor: pointer;
-`;
-
-const MyPageButton = styled.div`
     cursor: pointer;
 `;

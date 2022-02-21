@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
-import { Cookies } from "react-cookie";
 import { useAppContext } from "../../App/AppProvider";
-import { isUniqueEmail, signup } from "../../Util";
+import { isUniqueEmail, signup, makeLoginSuccessToast } from "../../Util";
 import { ChildrenProp, TempUserProp } from "../../Type";
 import { useVoteDetailContext } from "../../Page/Vote/Vote__Detail/Vote__DetailProvider";
 
@@ -27,8 +26,7 @@ export function useRequestSignupModalContext() {
 }
 
 export default function RequestSignupModalProvider({ children }: ChildrenProp) {
-    const cookies = new Cookies();
-    const { setTempUserInfo } = useAppContext();
+    const { setTempUserInfo, setCookie } = useAppContext();
     const { selectedVote, selectedOptions, closeModal } =
         useVoteDetailContext();
     const [selectUseEmail, setSelectUseEmail] = useState<boolean>(false);
@@ -44,10 +42,11 @@ export default function RequestSignupModalProvider({ children }: ChildrenProp) {
         if (!newTempUserInfo) return false;
         // 응답이 성공적인 경우 유저 정보 반영하고 쿠키에 저장
         setTempUserInfo(newTempUserInfo);
-        cookies.set("email", newTempUserInfo.email);
-        cookies.set("kakaoId", newTempUserInfo.kakaoId);
-        cookies.set("jwt", newTempUserInfo.jwt);
+        setCookie("email", newTempUserInfo.email);
+        setCookie("kakaoId", newTempUserInfo.kakaoId);
+        setCookie("jwt", newTempUserInfo.jwt);
         closeModal();
+        makeLoginSuccessToast("이메일 로그인이 완료되었습니다");
         return true;
     }
 

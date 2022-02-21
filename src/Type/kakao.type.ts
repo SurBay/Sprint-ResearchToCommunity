@@ -7,7 +7,7 @@ export type AccessTokenResponse = {
     scope?: string;
 };
 
-export type KakaoAccount = {
+export type KakaoAccountProp = {
     profile_needs_agreement?: boolean;
     profile_nickname_needs_agreement?: boolean;
     profile_image_needs_agreement?: boolean;
@@ -34,7 +34,7 @@ export type KakaoAccount = {
     ci_authenticated_at?: Date;
 };
 
-export type KakaoUserInfo = {
+export type KakaoUserInfoProp = {
     id: number;
-    kakao_account?: KakaoAccount;
+    kakao_account?: KakaoAccountProp;
 };

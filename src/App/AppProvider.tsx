@@ -7,11 +7,19 @@ import React, {
     RefObject,
 } from "react";
 import axios from "axios";
-import { Cookies } from "react-cookie";
+import { useCookies } from "react-cookie";
+import toast from "react-hot-toast";
 import { isUserConnectOnMobile, initializeKakaoSDK } from "../Util";
 import { TempUserProp, VoteProp, initialTempUser, ChildrenProp } from "../Type";
 import { API_ENDPOINT } from "../Constant";
 import { handleAxiosError } from "../Axios/axios.error";
+
+type CookieType =
+    | "email"
+    | "kakaoId"
+    | "jwt"
+    | "reservedVoteId"
+    | "reservedSelectedOptions";
 
 type AppContextProp = {
     tempUserInfo: TempUserProp;
@@ -21,11 +29,13 @@ type AppContextProp = {
     allVoteLoaded: boolean;
     hotVotes: VoteProp[];
     recentVotes: VoteProp[];
+    getCookie: (name: CookieType) => string | number[];
+    setCookie: (name: CookieType, value: string | number[]) => void;
+    removeCookie: (name: CookieType) => void;
     setTempUserInfo: (userInfo: TempUserProp) => void;
     setFirstVisitFlag: (state: boolean) => void;
     loadVote: () => void;
-    updateUserVoteParticipationInfo: (userId: string) => void;
-    updateVoteParticipatedUserInfo: (updatedVote: VoteProp) => void;
+    applyUpdatedSelectedVote: (updatedVote: VoteProp) => void;
 };
 
 const InitialAppContext: AppContextProp = {
@@ -35,11 +45,13 @@ const InitialAppContext: AppContextProp = {
     allVoteLoaded: false,
     hotVotes: [],
     recentVotes: [],
+    getCookie: () => "",
+    setCookie: () => {},
+    removeCookie: () => {},
     setTempUserInfo: () => {},
     setFirstVisitFlag: () => {},
     loadVote: () => {},
-    updateUserVoteParticipationInfo: () => {},
-    updateVoteParticipatedUserInfo: () => {},
+    applyUpdatedSelectedVote: () => {},
 };
 
 const AppContext = createContext(InitialAppContext);
@@ -48,7 +60,13 @@ export function useAppContext() {
 }
 
 export default function AppProvider({ children }: ChildrenProp) {
-    const cookies = new Cookies();
+    const [cookies, setCookies, removeCookies] = useCookies([
+        "email",
+        "kakaoId",
+        "jwt",
+        "reservedVoteId",
+        "reservedSelectedOptions",
+    ]);
     const [tempUserInfo, setTempUserInfo] =
         useState<TempUserProp>(initialTempUser);
     const [firstVisitFlag, setFirstVisitFlag] = useState<boolean>(true);
@@ -58,6 +76,9 @@ export default function AppProvider({ children }: ChildrenProp) {
     const votePage = useRef<number>(0); // InfiniteScroll시 스킵하고 가져올 vote page
     const allVote = useRef<VoteProp[]>([]);
     const [allVoteLoaded, setAllVoteLoaded] = useState<boolean>(false);
+
+    /////////////////////////////////////////////////////////////////////
+    // useEffect Part
 
     // 카카오 SDK 활성화 + 접속환경이 모바일인지 확인
     useEffect(() => {
@@ -92,9 +113,9 @@ export default function AppProvider({ children }: ChildrenProp) {
 
     // 쿠키에 사용자 정보가 있는 경우 백엔트에서 사용자 정보를 받아옴
     async function getUserInfo() {
-        const email = cookies.get("email");
-        const kakaoId = cookies.get("kakaoId");
-        const jwt = cookies.get("jwt");
+        const email = cookies.email;
+        const kakaoId = cookies.kakaoId;
+        const jwt = cookies.jwt;
         if ((email || kakaoId) && jwt) {
             await axios
                 .get<TempUserProp | null>(
@@ -116,6 +137,9 @@ export default function AppProvider({ children }: ChildrenProp) {
         }
     }
 
+    // useEffect Part
+    /////////////////////////////////////////////////////////////////////
+
     // InfiniteScroll: 10개씩 투표 로드
     function loadVote() {
         if (votePage.current * 10 < allVote.current.length) {
@@ -128,27 +152,37 @@ export default function AppProvider({ children }: ChildrenProp) {
         }
     }
 
-    // 투표 참여시 tempUserInfo에 반영 (VoteDetailProvider에서 사용)
-    function updateUserVoteParticipationInfo(participatedVoteId: string) {
-        const updatedUserInfo = { ...tempUserInfo };
-        updatedUserInfo.participatedVoteIds.push(participatedVoteId);
-        setTempUserInfo(updatedUserInfo);
-    }
-
-    // 투표 참여시 recentVotes, allVote에 반영 (VoteDetailProvider에서 사용)
-    function updateVoteParticipatedUserInfo(updatedSelectedVote: VoteProp) {
+    // selectedVote 정보 변경시 recentVotes, allVote에 반영 (VoteDetailProvider에서 사용)
+    function applyUpdatedSelectedVote(updatedSelectedVote: VoteProp) {
         const index = allVote.current.findIndex((vote) => {
             return vote._id == updatedSelectedVote._id;
         });
 
         if (index != -1) {
             // recentVote 업데이트
-            const updatedRecentVotes = { ...recentVotes };
+            const updatedRecentVotes = [...recentVotes];
             updatedRecentVotes[index] = updatedSelectedVote;
             setRecentVotes(updatedRecentVotes);
             // allVote 업데이트
             allVote.current[index] = updatedSelectedVote;
         }
+    }
+
+    // Cookie 관련 함수
+    type CookieKey = keyof typeof cookies;
+
+    function getCookie(name: CookieKey) {
+        return cookies[name] || "";
+    }
+
+    function setCookie(name: CookieKey, value: string | number[]) {
+        setCookies(name, value, { path: "/" });
+        return;
+    }
+
+    function removeCookie(name: CookieKey) {
+        removeCookies(name);
+        return;
     }
 
     const appContext = {
@@ -159,11 +193,13 @@ export default function AppProvider({ children }: ChildrenProp) {
         allVoteLoaded,
         hotVotes,
         recentVotes,
+        getCookie,
+        setCookie,
+        removeCookie,
         setTempUserInfo,
         setFirstVisitFlag,
         loadVote,
-        updateUserVoteParticipationInfo,
-        updateVoteParticipatedUserInfo,
+        applyUpdatedSelectedVote,
     };
 
     return (

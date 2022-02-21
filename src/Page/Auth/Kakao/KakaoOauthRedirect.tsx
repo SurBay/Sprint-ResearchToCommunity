@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Cookies } from "react-cookie";
+import { makeLoginSuccessToast } from "../../../Util";
 import { useAppContext } from "../../../App/AppProvider";
 import {
     getKakaoUserInfoFromCode,
@@ -14,8 +14,7 @@ import { TempUserProp } from "../../../Type";
 export function KakaoOatuhRedirect() {
     const [params] = useSearchParams();
     const navigate = useNavigate();
-    const cookies = new Cookies();
-    const { setTempUserInfo } = useAppContext();
+    const { setTempUserInfo, getCookie, setCookie } = useAppContext();
 
     useEffect(() => {
         const code = params.get("code");
@@ -24,7 +23,7 @@ export function KakaoOatuhRedirect() {
             return;
         }
         handleKakaoLogin(code);
-        const reservedVoteId = cookies.get("reservedVoteId");
+        const reservedVoteId = getCookie("reservedVoteId");
         if (reservedVoteId) {
             navigate(`/redirect?voteId=${reservedVoteId}`, { replace: true });
         } else {
@@ -44,12 +43,14 @@ export function KakaoOatuhRedirect() {
         if (tempUserInfo) {
             saveUserInfo(tempUserInfo);
             setTempUserInfo(tempUserInfo);
+            makeLoginSuccessToast("카카오 로그인이 완료되었습니다");
             return;
         }
         const newTempUserInfo = await signupWithKakaoUserInfo(kakaoUserInfo);
         if (newTempUserInfo) {
             saveUserInfo(newTempUserInfo);
             setTempUserInfo(newTempUserInfo);
+            makeLoginSuccessToast("카카오 로그인이 완료되었습니다");
             return;
         }
         // TODO: error message
@@ -57,9 +58,9 @@ export function KakaoOatuhRedirect() {
     }
 
     function saveUserInfo(userInfo: TempUserProp) {
-        cookies.set("email", userInfo.email);
-        cookies.set("kakaoId", userInfo.kakaoId);
-        cookies.set("jwt", userInfo.jwt);
+        setCookie("email", userInfo.email);
+        setCookie("kakaoId", userInfo.kakaoId);
+        setCookie("jwt", userInfo.jwt);
     }
 
     return (

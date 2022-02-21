@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
-import { FlexSpaceBetweenDiv, FlexCenteringDiv } from "../../../Style";
+import { getDotFormDate } from "../../../Util";
+import { SvgIcon, FlexSpaceBetweenDiv, FlexCenteringDiv } from "../../../Style";
+import AuthorIcon from "../../../Resource/svg/author-icon.svg";
+import ShareIcon from "../../../Resource/svg/share-icon.svg";
 
 export default function VoteDetailHeader() {
     const { selectedVote } = useVoteDetailContext();
@@ -9,10 +12,13 @@ export default function VoteDetailHeader() {
     return (
         <VoteDetailHeaderContainer>
             <VoteAuthorProfileContainer>
-                <div>작성자 사진</div>
-                <span>{selectedVote.author}</span>
+                <SvgIcon src={AuthorIcon} height={"60%"} />
+                <AuthorAndDateContainer>
+                    <AuthorText>{selectedVote.author}</AuthorText>
+                    <DateText>{getDotFormDate(selectedVote.date)}</DateText>
+                </AuthorAndDateContainer>
             </VoteAuthorProfileContainer>
-            <div>공유하기</div>
+            <SvgIcon src={ShareIcon} height={"60%"} />
         </VoteDetailHeaderContainer>
     );
 }
@@ -24,4 +30,22 @@ const VoteDetailHeaderContainer = styled(FlexSpaceBetweenDiv)`
     margin-bottom: 40px;
 `;
 
-const VoteAuthorProfileContainer = styled(FlexCenteringDiv)``;
+const VoteAuthorProfileContainer = styled(FlexCenteringDiv)`
+    gap: 8px;
+`;
+
+const AuthorAndDateContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+`;
+
+const AuthorText = styled.span`
+    font-size: 12px;
+    color: ${(props) => props.theme.vote.voteDetailHeaderAuthorColor};
+`;
+
+const DateText = styled.span`
+    font-size: 9px;
+    color: ${(props) => props.theme.vote.voteDetailHeaderDateColor};
+`;

@@ -30,8 +30,8 @@ export type VoteProp = {
     title: string; //제목
     content: string; //글 내용
     author: string; //작성자
-    date: Date; //게시 날짜
-    deadline: Date;
+    date: string | Date; //게시 날짜
+    deadline: string | Date;
     comments: VoteCommentProp[]; //댓글 리스트
     done: boolean; //설문 마감
     author_userid: string; //작성자 email
@@ -39,6 +39,8 @@ export type VoteProp = {
     participants_userids: string[]; //참여한 유저 email
     polls: PollProp[]; //설문 항목들
     liked_users: string[]; //좋아요 누른 유저들(이메일)
+    likedTempUserEmails: string[]; //좋아요 누른 유저들(이메일)
+    likedTempUserKakaoIds: string[]; //좋아요 누른 유저들(이메일)
     hide: boolean;
     visit: number;
 };
@@ -57,6 +59,8 @@ export const initialVote: VoteProp = {
     participants_userids: [], //참여한 유저 email
     polls: [initialPoll], //설문 항목들
     liked_users: [], //좋아요 누른 유저들(이메일)
+    likedTempUserEmails: [], //좋아요 누른 유저들(이메일)
+    likedTempUserKakaoIds: [], //좋아요 누른 유저들(이메일)
     hide: false,
     visit: 0,
 };

@@ -1,32 +1,41 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
-import { FlexCenteringDiv } from "../../../Style";
+import { StylelessLink, FlexCenteringDiv } from "../../../Style";
 
 export default function VoteDetailOthers() {
-    const { prevVote, nextVote } = useVoteDetailContext();
+    const { hotVote, prevVote, nextVote } = useVoteDetailContext();
 
     return (
         <VoteDetailOtherContainer>
             <SeeOtherVoteText>다른 투표 둘러보기</SeeOtherVoteText>
             <OtherVoteRow>
                 <OtherVoteHotTag>HOT</OtherVoteHotTag>
-                <OtherVoteTitle>
-                    눈치게임: 남들이 가장 적게 고를 것 같은 숫자는?
-                </OtherVoteTitle>
+                <OtherVoteTitle>{hotVote.title}</OtherVoteTitle>
             </OtherVoteRow>
             <OtherVoteRow>
                 <OtherVoteTag>이전</OtherVoteTag>
-                <Link to={`/vote/${prevVote._id}`}>
+                {prevVote._id ? (
+                    <OtherVoteTitle>
+                        <StylelessLink to={`/vote/${prevVote._id}`}>
+                            {prevVote.title}
+                        </StylelessLink>
+                    </OtherVoteTitle>
+                ) : (
                     <OtherVoteTitle>{prevVote.title}</OtherVoteTitle>
-                </Link>
+                )}
             </OtherVoteRow>
             <OtherVoteRow>
                 <OtherVoteTag>다음</OtherVoteTag>
-                <Link to={`/vote/${nextVote._id}`}>
+                {nextVote._id ? (
+                    <OtherVoteTitle>
+                        <StylelessLink to={`/vote/${nextVote._id}`}>
+                            {nextVote.title}
+                        </StylelessLink>
+                    </OtherVoteTitle>
+                ) : (
                     <OtherVoteTitle>{nextVote.title}</OtherVoteTitle>
-                </Link>
+                )}
             </OtherVoteRow>
         </VoteDetailOtherContainer>
     );
@@ -42,6 +51,7 @@ const VoteDetailOtherContainer = styled.div`
 const SeeOtherVoteText = styled.span`
     font-size: 16px;
     line-height: 40px;
+    color: ${(props) => props.theme.vote.voteOtherHeaderColor};
 `;
 
 const OtherVoteRow = styled(FlexCenteringDiv)`
@@ -53,6 +63,7 @@ const OtherVoteRow = styled(FlexCenteringDiv)`
 const OtherVoteTag = styled(FlexCenteringDiv)`
     width: 70px;
     height: 100%;
+    color: ${(props) => props.theme.vote.voteOtherTagColor};
 `;
 
 const OtherVoteHotTag = styled(OtherVoteTag)`
@@ -63,7 +74,9 @@ const OtherVoteHotTag = styled(OtherVoteTag)`
 
 const OtherVoteTitle = styled(FlexCenteringDiv)`
     justify-content: flex-start;
+    width: calc(100% - 70px);
     max-width: calc(100% - 70px);
+    color: ${(props) => props.theme.vote.voteOtherTitleColor};
     padding: 0px 12px;
     cursor: pointer;
     display: inline-block;

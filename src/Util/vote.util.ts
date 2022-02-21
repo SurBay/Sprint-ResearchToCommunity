@@ -33,3 +33,20 @@ export function getPollParticipantsNumber(poll?: PollProp) {
 
     return sum;
 }
+
+// 최다 득표 수를 반환
+export function getWinningPollParticipantsNumber(vote: VoteProp) {
+    const voteNums: number[] = [];
+    vote.polls.forEach((poll) => {
+        voteNums.push(getPollParticipantsNumber(poll));
+    });
+    return Math.max(...voteNums);
+}
+
+export function getVoteLikedNumber(vote: VoteProp) {
+    return (
+        vote.liked_users.length +
+        vote.likedTempUserEmails.length +
+        vote.likedTempUserKakaoIds.length
+    );
+}

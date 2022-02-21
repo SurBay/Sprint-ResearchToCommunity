@@ -4,6 +4,7 @@ export type TempUserProp = {
     kakaoId: string;
     jwt: string;
     participatedVoteIds: string[];
+    likedVoteIds: string[];
 };
 
 export const initialTempUser: TempUserProp = {
@@ -12,4 +13,5 @@ export const initialTempUser: TempUserProp = {
     kakaoId: "",
     jwt: "",
     participatedVoteIds: [],
+    likedVoteIds: [],
 };

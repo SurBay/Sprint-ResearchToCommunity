@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Cookies } from "react-cookie";
 import { useAppContext } from "../../../App/AppProvider";
 import {
     VoteProp,
@@ -8,28 +7,31 @@ import {
     initialVote,
     initialAdjoiningVoteProp,
     ChildrenProp,
-    TempUserProp,
 } from "../../../Type";
 
 type VoteDetailContextProp = {
     selectedVote: VoteProp;
+    hotVote: AdjoiningVoteProp;
     prevVote: AdjoiningVoteProp;
     nextVote: AdjoiningVoteProp;
     selectedOptions: number[];
     modalOpened: boolean;
     toggleVoteOption: (optionIndex: number) => void;
     submitVote: () => void;
+    toggleLike: () => void;
     closeModal: () => void;
 };
 
 const InitialVoteDetailContext: VoteDetailContextProp = {
     selectedVote: initialVote,
+    hotVote: initialAdjoiningVoteProp,
     prevVote: initialAdjoiningVoteProp,
     nextVote: initialAdjoiningVoteProp,
     selectedOptions: [],
     modalOpened: false,
     toggleVoteOption: () => {},
     submitVote: () => {},
+    toggleLike: () => {},
     closeModal: () => {},
 };
 
@@ -41,16 +43,22 @@ export function useVoteDetailContext() {
 export default function VoteDetailProvider({ children }: ChildrenProp) {
     const { voteId } = useParams();
     const navigate = useNavigate();
-    const cookies = new Cookies();
     const {
         tempUserInfo,
         allVote,
         allVoteLoaded,
-        updateUserVoteParticipationInfo,
-        updateVoteParticipatedUserInfo,
+        hotVotes,
+        getCookie,
+        setCookie,
+        removeCookie,
+        setTempUserInfo,
+        applyUpdatedSelectedVote,
     } = useAppContext();
     const [selectedVote, setSelectedVote] = useState<VoteProp>(initialVote);
     const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+    const [hotVote, setHotVote] = useState<AdjoiningVoteProp>(
+        initialAdjoiningVoteProp
+    );
     const [prevVote, setPrevVote] = useState<AdjoiningVoteProp>(
         initialAdjoiningVoteProp
     );
@@ -59,13 +67,21 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
     );
     const [modalOpened, setModalOpened] = useState<boolean>(false);
 
+    ///////////////////////////////////////////////////////////
+    // useEffect Part
+
     useEffect(() => {
         if (!voteId) {
             // voteId가 없는 경우 튕겨냄
             navigate("/", { replace: true });
+            return;
         }
-
-        return () => {};
+        // 카카오 로그인하여 리다이렉트 된 경우 선택했던 옵션으로 선택지 선택
+        loadAndApplyParticipatingVoteInfo();
+        return () => {
+            // 나갈 땐 임시선택 쿠키 삭제
+            clearReservedParticipationCookie();
+        };
     }, []);
 
     // 선택한 투표 정보 및 인접한 투표 정보 로드:
@@ -78,7 +94,14 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         }
     }, [allVoteLoaded, voteId]);
 
-    // 선택한 투표 세부정보 로드
+    //
+    useEffect(() => {
+        getOneHotVote();
+    }, [hotVotes]);
+
+    ///////////////////////////////////////////////////////////
+
+    // 선택한 투표 세부정보 및 인접한 정보 로드
     function getVoteDetail(voteId: string) {
         // allVote가 이미 모든 정보를 가지고 있으므로 백엔드 호출은 최소화
         if (!allVote?.current) return;
@@ -97,16 +120,46 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
     function setAdjoiningVotes(index: number) {
         if (!allVote?.current) return;
         const prevVote = {
-            _id: allVote.current[index + 1]._id || "",
-            title: allVote.current[index + 1].title || "(이전 글이 없습니다)",
+            _id: allVote.current[index + 1]?._id || "",
+            title: allVote.current[index + 1]?.title || "(이전 글이 없습니다)",
         };
         const nextVote = {
-            _id: allVote.current[index - 1]._id || "",
-            title: allVote.current[index - 1].title || "(다음 글이 없습니다)",
+            _id: allVote.current[index - 1]?._id || "",
+            title: allVote.current[index - 1]?.title || "(다음 글이 없습니다)",
         };
         setPrevVote(prevVote);
         setNextVote(nextVote);
     }
+
+    // 로그인하지 않은 유저 투표 참여 데이터가 있는지 확인
+    // 존재한다면 마지막 선택 옵션을 자동으로 선택하고 삭제
+    function loadAndApplyParticipatingVoteInfo() {
+        const reservedOptions = getCookie("reservedSelectedOptions");
+        if (Array.isArray(reservedOptions)) {
+            setSelectedOptions(reservedOptions);
+        }
+        clearReservedParticipationCookie();
+    }
+
+    //// 임시 저장된 투표 참여 정보 쿠키 삭제
+    function clearReservedParticipationCookie() {
+        removeCookie("reservedVoteId");
+        // TODO: (bug) #! cookie
+        // 쿠키를 제거해도 왜 남아있는거지.. 보험삼아 초기화 함
+        setCookie("reservedSelectedOptions", []);
+        removeCookie("reservedSelectedOptions");
+    }
+
+    // HOT 투표 하나 로드
+    function getOneHotVote() {
+        setHotVote({
+            _id: hotVotes[0]?._id || "",
+            title: hotVotes[0]?.title || "",
+        });
+    }
+
+    // useEffect Part
+    ///////////////////////////////////////////////////////////
 
     // 투표 상세 페이지에서 선지 선택
     function toggleVoteOption(optionIndex: number) {
@@ -143,16 +196,25 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
     function submitVote() {
         if (tempUserInfo.email || tempUserInfo.kakaoId) {
             // TODO: axios call
+            updateUserVoteParticipateInfo();
             const updatedSelectedVote = updateAndReturnSelectedVote();
-            updateUserVoteParticipationInfo(updatedSelectedVote._id);
-            updateVoteParticipatedUserInfo(updatedSelectedVote);
+            applyUpdatedSelectedVote(updatedSelectedVote);
         } else {
             saveParticipatingVoteInfo();
             setModalOpened(true);
         }
     }
 
-    // 투표 참여: selectedVote에 user 정보 추가하고 반환
+    //// 투표 참여:
+    //// tempUserInfo에 참여 투표 id 추가하고 반환
+    function updateUserVoteParticipateInfo() {
+        const updatedUserInfo = { ...tempUserInfo };
+        updatedUserInfo.participatedVoteIds.push(selectedVote._id);
+        setTempUserInfo(updatedUserInfo);
+    }
+
+    //// 투표 참여:
+    //// selectedVote에 user 정보 추가하고 반환
     function updateAndReturnSelectedVote() {
         const updatedSelectedVote = { ...selectedVote };
         if (tempUserInfo.kakaoId) {
@@ -166,23 +228,82 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
             return updatedSelectedVote;
         }
 
-        if (tempUserInfo.email) {
-            // 이메일로 로그인 한 경우
-            selectedOptions.forEach((optionIndex) => {
-                updatedSelectedVote.polls[
-                    optionIndex
-                ].participatedTempUserEmails.push(tempUserInfo.email);
-            });
-            setSelectedVote(updatedSelectedVote);
-            return updatedSelectedVote;
-        }
+        // 이메일로 로그인 한 경우
+        selectedOptions.forEach((optionIndex) => {
+            updatedSelectedVote.polls[
+                optionIndex
+            ].participatedTempUserEmails.push(tempUserInfo.email);
+        });
+        setSelectedVote(updatedSelectedVote);
         return updatedSelectedVote;
     }
 
+    //// 투표 참여 :
+    //// 로그인되지 않은 상태에서 투표 참여하는 경우 투표 참여 데이터 보관(카카오 로그인할 때만 쓰임)
     function saveParticipatingVoteInfo() {
-        console.log(`비로그인 유저 투표 참여 정보를 저장합니다`);
-        cookies.set("reservedVoteId", selectedVote._id);
-        cookies.set("reservedSelectedOptions", selectedOptions);
+        setCookie("reservedVoteId", selectedVote._id);
+        setCookie("reservedSelectedOptions", selectedOptions);
+    }
+
+    // 좋아요 토글
+    function toggleLike() {
+        toggleUserLikeInfo();
+        const updatedSelectedVote = toggleAndGetVoteLikedInfo();
+        applyUpdatedSelectedVote(updatedSelectedVote);
+    }
+
+    //// 좋아요 토글 - 유저 정보 업데이트
+    function toggleUserLikeInfo() {
+        const updatedUserInfo = { ...tempUserInfo };
+        if (updatedUserInfo.likedVoteIds.includes(selectedVote._id)) {
+            updatedUserInfo.likedVoteIds.splice(
+                updatedUserInfo.likedVoteIds.indexOf(selectedVote._id),
+                1
+            );
+        } else {
+            updatedUserInfo.likedVoteIds.push(selectedVote._id);
+        }
+        setTempUserInfo(updatedUserInfo);
+    }
+
+    //// 좋아요 토글 - 투표 정보 업데이트
+    function toggleAndGetVoteLikedInfo() {
+        const updatedSelectedVote = { ...selectedVote };
+        // 카카오톡으로 로그인한 경우
+        if (tempUserInfo.kakaoId) {
+            if (
+                updatedSelectedVote.likedTempUserKakaoIds.includes(
+                    tempUserInfo.kakaoId
+                )
+            ) {
+                updatedSelectedVote.likedTempUserKakaoIds.splice(
+                    updatedSelectedVote.likedTempUserKakaoIds.indexOf(
+                        tempUserInfo.kakaoId
+                    ),
+                    1
+                );
+                return updatedSelectedVote;
+            }
+            updatedSelectedVote.likedTempUserKakaoIds.push(
+                tempUserInfo.kakaoId
+            );
+            return updatedSelectedVote;
+        }
+
+        // 이메일로 로그인한 경우
+        if (
+            updatedSelectedVote.likedTempUserEmails.includes(tempUserInfo.email)
+        ) {
+            updatedSelectedVote.likedTempUserEmails.splice(
+                updatedSelectedVote.likedTempUserEmails.indexOf(
+                    tempUserInfo.email
+                ),
+                1
+            );
+            return updatedSelectedVote;
+        }
+        updatedSelectedVote.likedTempUserEmails.push(tempUserInfo.email);
+        return updatedSelectedVote;
     }
 
     function closeModal() {
@@ -191,12 +312,14 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
 
     const voteDetailContext = {
         selectedVote,
+        hotVote,
         prevVote,
         nextVote,
         selectedOptions,
         modalOpened,
         toggleVoteOption,
         submitVote,
+        toggleLike,
         closeModal,
     };
 

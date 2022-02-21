@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
-import { FlexSpaceBetweenDiv, StylelessButton } from "../../../Style";
+import { SvgIcon, FlexSpaceBetweenDiv, StylelessButton } from "../../../Style";
 import { PollProp } from "../../../Type";
+import checkIcon from "../../../Resource/svg/checked-icon.svg";
 
 export default function VoteDetailSelect() {
     const { selectedVote, selectedOptions, submitVote } =
@@ -44,9 +45,9 @@ function VoteOption({ poll, index }: { poll: PollProp; index: number }) {
             selected={selectedOptions.includes(index)}
         >
             <VoteOptionTitle>{poll.content}</VoteOptionTitle>
-            <VoteOptionSelected>
-                {selectedOptions.includes(index) && "(V)"}
-            </VoteOptionSelected>
+            {selectedOptions.includes(index) && (
+                <SvgIcon src={checkIcon} width={"30px"} />
+            )}
         </VoteOptionContainer>
     );
 }
@@ -65,21 +66,19 @@ const AllVoteOptionContainer = styled.div`
 
 const VoteOptionContainer = styled(FlexSpaceBetweenDiv)<{ selected: boolean }>`
     width: 94%;
-    height: 50px;
+    height: 56px;
     border: 1px solid
         ${(props) =>
             props.selected
                 ? props.theme.voteOptionSelectedBorderColor
                 : "gray"};
-    border-radius: 25px;
+    border-radius: 28px;
     padding: 0px 20px;
     margin: 12px auto;
     cursor: pointer;
 `;
 
 const VoteOptionTitle = styled.span``;
-
-const VoteOptionSelected = styled.div``;
 
 const VoteSubmitButton = styled(StylelessButton)`
     width: 94%;

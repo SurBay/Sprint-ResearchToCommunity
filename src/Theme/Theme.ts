@@ -1,12 +1,17 @@
 import { Color } from "./Color";
+import { kakaoTheme, voteTheme } from "./Distribute";
 
 export const Theme = {
+    kakao: kakaoTheme,
+    vote: voteTheme,
+
     // header
     headerColor: Color.mainTheme,
 
     // div - color
     voteDoneBackgroundColor: Color.doneTagBackgroundGray,
     hotTagColor: Color.mainTheme,
+    highestResultBarColor: Color.mainTheme,
 
     // button - color
     voteOptionSelectedBorderColor: Color.mainTheme,

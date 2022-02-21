@@ -7,7 +7,8 @@ import VoteList from "../Page/Vote/Vote__List";
 import VoteDetail from "../Page/Vote/Vote__Detail";
 import { KakaoOatuhRedirect } from "../Page/Auth";
 import { LandingPageRedirector } from "../Page/Redirector";
-import { FullFlexDiv, FullBlockDiv } from "../Style";
+import { FullBlockDiv } from "../Style";
+import { Toaster } from "react-hot-toast";
 
 export default function AppContainer() {
     const { connectOnMobile } = useAppContext();
@@ -17,6 +18,7 @@ export default function AppContainer() {
     return (
         <BrowserRouter>
             <MainRouter />
+            <Toaster />
         </BrowserRouter>
     );
 }

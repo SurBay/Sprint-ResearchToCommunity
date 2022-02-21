@@ -2,8 +2,7 @@ import axios from "axios";
 import { handleAxiosError } from "../Axios/axios.error";
 import {
     AccessTokenResponse,
-    KakaoAccount,
-    KakaoUserInfo,
+    KakaoUserInfoProp,
     TempUserProp,
     VoteProp,
 } from "../Type";
@@ -55,7 +54,7 @@ export function sendKakaoFeedMessage(vote: VoteProp) {
 // 결과적으로 code를 카카오 사용자 정보와 교환함
 export async function getKakaoUserInfoFromCode(
     code: string
-): Promise<KakaoUserInfo | null> {
+): Promise<KakaoUserInfoProp | null> {
     const access_token = await getKakaoAccessToken(code);
     if (access_token) {
         return await getKakaoUserInfoByAccessToken(access_token);
@@ -107,13 +106,16 @@ async function getKakaoAccessToken(code: string) {
 // 이 부분은 브라우저를 이용한 스크립트 실행이 막혀있으므로 backend를 이용해야 함.
 async function getKakaoUserInfoByAccessToken(
     access_token: string
-): Promise<KakaoUserInfo | null> {
+): Promise<KakaoUserInfoProp | null> {
     return await axios
-        .get<KakaoUserInfo>(`${API_ENDPOINT}/api/temp-users/kakao-account`, {
-            headers: {
-                access_token: access_token,
-            },
-        })
+        .get<KakaoUserInfoProp>(
+            `${API_ENDPOINT}/api/temp-users/kakao-account`,
+            {
+                headers: {
+                    access_token: access_token,
+                },
+            }
+        )
         .then((res) => {
             return res.data;
         })
@@ -140,7 +142,7 @@ export async function getTempUserInfoByKakaoId(
 }
 
 export async function signupWithKakaoUserInfo(
-    kakaoUserInfo: KakaoUserInfo
+    kakaoUserInfo: KakaoUserInfoProp
 ): Promise<TempUserProp | null> {
     return await axios
         .post<TempUserProp | null>(

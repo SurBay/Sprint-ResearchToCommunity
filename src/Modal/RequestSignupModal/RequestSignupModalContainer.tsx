@@ -4,7 +4,13 @@ import { useVoteDetailContext } from "../../Page/Vote/Vote__Detail/Vote__DetailP
 import { useRequestSignupModalContext } from "./RequestSignupModalProvider";
 import { KakaoOauthRedirectWrapper } from "../../Component/Kakao.component";
 import { isValidEmail, isUniqueEmail } from "../../Util";
-import { DefaultModalDiv, StylelessButton, DefaultInput } from "../../Style";
+import {
+    SvgIcon,
+    DefaultModalDiv,
+    StylelessButton,
+    DefaultInput,
+} from "../../Style";
+import KakaoCommentIcon from "../../Resource/svg/kakaotalk-comment-icon.svg";
 
 export default function RequestSignupModalContainer() {
     const { selectUseEmail } = useRequestSignupModalContext();
@@ -50,14 +56,16 @@ function SampleImagePart() {
 
 function LoginOptionSelectPart() {
     const { closeModal } = useVoteDetailContext();
-    const { setSelectUseEmail, saveParticipatingVoteInfo } =
-        useRequestSignupModalContext();
+    const { setSelectUseEmail } = useRequestSignupModalContext();
 
     return (
         <SelectOptionsDiv>
             <KakaoOauthRedirectWrapper>
                 <SelectKakaoLoginButton>
-                    카카오로 3초만에 시작하기
+                    <KakaoButtonContent>
+                        <SvgIcon src={KakaoCommentIcon} width={"18px"} />
+                        카카오로 3초만에 시작하기
+                    </KakaoButtonContent>
                 </SelectKakaoLoginButton>
             </KakaoOauthRedirectWrapper>
 
@@ -188,10 +196,15 @@ const SelectKakaoLoginButton = styled.div`
     height: 55px;
     font-size: 15px;
     color: black;
-    background-color: yellow;
+    background-color: ${(props) => props.theme.kakao.loginButtonYellow};
     border-radius: 12px;
     margin-bottom: 18px;
     cursor: pointer;
+`;
+
+const KakaoButtonContent = styled.div`
+    display: flex;
+    gap: 10px;
 `;
 
 const SelectUseEmailTextRow = styled(SubContainerRow)`

@@ -1,13 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
-import { sendKakaoFeedMessage } from "../../../Util";
+import {
+    sendKakaoFeedMessage,
+    getVoteParticipantsNumber,
+    getPollParticipantsNumber,
+    getWinningPollParticipantsNumber,
+} from "../../../Util";
 import { PollProp } from "../../../Type";
 import {
+    SvgIcon,
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
     StylelessButton,
 } from "../../../Style";
+import KakaoCommentIcon from "../../../Resource/svg/kakaotalk-comment-icon.svg";
 
 export default function VoteDetailResult() {
     const { selectedVote } = useVoteDetailContext();
@@ -31,7 +38,10 @@ export default function VoteDetailResult() {
                         sendKakaoFeedMessage(selectedVote);
                     }}
                 >
-                    카카오톡 공유
+                    <KakaoButtonContent>
+                        <SvgIcon src={KakaoCommentIcon} width={"15px"} />
+                        카카오톡 공유
+                    </KakaoButtonContent>
                 </KakaoShareButton>
             </ShareButtonRow>
         </Container>
@@ -39,14 +49,32 @@ export default function VoteDetailResult() {
 }
 
 function VoteOption({ poll }: { poll: PollProp }) {
+    const { selectedVote } = useVoteDetailContext();
+    const pollPercentage = (
+        (getPollParticipantsNumber(poll) /
+            getVoteParticipantsNumber(selectedVote)) *
+        100
+    ).toFixed(1);
+
     return (
         <VoteOptionContainer>
             <VoteOptionContentRow>
                 <VoteOptionContent>{poll.content}</VoteOptionContent>
-                <VoteOptionPercentage>53%</VoteOptionPercentage>
+                <VoteOptionPercentage
+                    winning={
+                        getPollParticipantsNumber(poll) >=
+                        getWinningPollParticipantsNumber(selectedVote)
+                    }
+                >{`${pollPercentage}%`}</VoteOptionPercentage>
             </VoteOptionContentRow>
             <VoteResultBarContainer>
-                <VoteResultBar percentage={53} />
+                <VoteResultBar
+                    winning={
+                        getPollParticipantsNumber(poll) >=
+                        getWinningPollParticipantsNumber(selectedVote)
+                    }
+                    percentage={pollPercentage}
+                />
             </VoteResultBarContainer>
         </VoteOptionContainer>
     );
@@ -67,7 +95,7 @@ const AllVoteOptionContainer = styled.div`
 const VoteOptionContainer = styled(FlexCenteringDiv)`
     position: relative;
     width: 94%;
-    height: 50px;
+    height: 56px;
     margin: 12px auto;
 `;
 
@@ -78,7 +106,12 @@ const VoteOptionContentRow = styled(FlexSpaceBetweenDiv)`
 
 const VoteOptionContent = styled.span``;
 
-const VoteOptionPercentage = styled.span``;
+const VoteOptionPercentage = styled.span<{ winning: boolean }>`
+    color: ${(props) =>
+        props.winning
+            ? props.theme.vote.voteDetailResultWinningPercentageColor
+            : props.theme.vote.voteDetailResultPercentageColor};
+`;
 
 const VoteResultBarContainer = styled.div`
     position: absolute;
@@ -86,14 +119,23 @@ const VoteResultBarContainer = styled.div`
     display: flex;
     width: 96%;
     height: 8px;
-    background-color: gray;
+    background-color: ${(props) =>
+        props.theme.vote.voteDetailResultBarContainerColor};
     border-radius: 4px;
     overflow: hidden;
 `;
 
-const VoteResultBar = styled.div<{ percentage: number }>`
+const VoteResultBar = styled.div<{
+    winning: boolean;
+    percentage: number | string;
+}>`
     ${(props) => `width:${props.percentage}%`};
-    background-color: blue;
+    height: 100%;
+    background-color: ${(props) =>
+        props.winning
+            ? props.theme.vote.voteDetailResultWinningBarColor
+            : props.theme.vote.voteDetailResultBarColor};
+    border-radius: 4px;
 `;
 
 const ShareButtonRow = styled(FlexSpaceBetweenDiv)`
@@ -104,10 +146,19 @@ const ShareButtonRow = styled(FlexSpaceBetweenDiv)`
 const URLShareButton = styled(StylelessButton)`
     width: 48%;
     height: 100%;
-    background-color: gray;
+    font-size: 15px;
+    color: white;
+    background-color: ${(props) =>
+        props.theme.vote.voteDetailResultURLShareButtonColor};
     border-radius: 10px;
 `;
 
 const KakaoShareButton = styled(URLShareButton)`
-    background-color: gray;
+    color: black;
+    background-color: ${(props) => props.theme.kakao.shareButtonYellow};
+`;
+
+const KakaoButtonContent = styled.div`
+    display: flex;
+    gap: 10px;
 `;

@@ -1,28 +1,15 @@
-import React, {
-    useState,
-    useEffect,
-    useRef,
-    useCallback,
-    RefObject,
-} from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
-import { Link, useSearchParams } from "react-router-dom";
 import { useAppContext } from "../../../App/AppProvider";
-import { useVoteListContext } from "./VoteListProvider";
 import VoteListPageHeader from "../../../Component/Header/VoteListPageHeader";
+import VoteEach from "./VoteEach";
 import {
     FullBlockHeaderPageDiv,
-    FullFlexHeaderPageDiv,
-    FullFlexDiv,
-    FullBlockDiv,
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
 } from "../../../Style";
-import { VoteProp } from "../../../Type";
 
 export default function VoteListContainer() {
-    const {} = useVoteListContext();
-
     return (
         <>
             <VoteListPageHeader />
@@ -65,38 +52,6 @@ function RecentVote() {
                 );
             })}
         </RecentVoteContainer>
-    );
-}
-
-function VoteEach({
-    vote,
-    showAuthor,
-}: {
-    vote: VoteProp;
-    showAuthor: boolean;
-}) {
-    return (
-        <Link to={`/vote/${vote._id}`}>
-            <VoteContainer>
-                <VoteTitleRow>
-                    <VoteTitleLeft>
-                        <VoteTitleText>{vote.title}</VoteTitleText>
-                        <VoteDoneTag>마감</VoteDoneTag>
-                    </VoteTitleLeft>
-                    <VoteTitleRight>
-                        <VoteParticipateInfoDiv>(O) 12</VoteParticipateInfoDiv>
-                    </VoteTitleRight>
-                </VoteTitleRow>
-                <VoteContentTextRow>{vote.content}</VoteContentTextRow>
-                {showAuthor && (
-                    <>
-                        <br />
-                        <VoteAuthorText>{vote.author}</VoteAuthorText>
-                        <VoteCreateText>{`08:55`}</VoteCreateText>
-                    </>
-                )}
-            </VoteContainer>
-        </Link>
     );
 }
 
@@ -162,75 +117,12 @@ const RecentVoteTagRow = styled(FlexSpaceBetweenDiv)`
 `;
 
 const RecentVoteTag = styled.div`
+    color: ${(props) => props.theme.vote.voteListRecentVoteTagColor};
     font-size: 15px;
 `;
 
 const RecentVoteUpdateTime = styled.div`
     font-size: 12px;
-`;
-
-// 투표 각각
-const VoteContainer = styled.div`
-    display: block;
-    padding: 10px 15px;
-`;
-
-const VoteTitleRow = styled(FlexSpaceBetweenDiv)``;
-
-//// 투표 제목, 마감 여부
-const VoteTitleLeft = styled.div`
-    display: flex;
-    width: 75%;
-`;
-
-const VoteTitleText = styled.div`
-    display: inline-block;
-    max-width: calc(100% - 55px);
-    font-size: 4.2vw;
-    line-height: 7.5vw;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-const VoteDoneTag = styled(FlexCenteringDiv)`
-    width: 40px;
-    height: 24px;
-    font-size: 10px;
-    margin-left: 15px;
-    border-radius: 12px;
-    color: gray;
-    background-color: ${(props) => props.theme.voteDoneBackgroundColor};
-`;
-
-//// 투표 참여 여부, 참여 인원 수
-const VoteTitleRight = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    width: 25%;
-`;
-
-const VoteParticipateInfoDiv = styled.div``;
-
-//// 투표 본문
-const VoteContentTextRow = styled.div`
-    display: inline-block;
-    max-width: 100%;
-    font-size: 3.5vw;
-    line-height: 6vw;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-//// 투표 작성자/작성일시 정보
-const VoteAuthorText = styled.span`
-    font-size: 3vw;
-    line-height: 5vw;
-`;
-
-const VoteCreateText = styled(VoteAuthorText)`
-    padding-left: 10px;
 `;
 
 // IntersectionObserver로 관찰하는 마지막 div
