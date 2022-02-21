@@ -6,8 +6,8 @@
   query = {code = ":code"}
 
 [[redirects]]
-  from = "*"
-  to = "redirect"
+  from = "https://*"
+  to = "/redirect"
   status = 200
   force = true
   query = {voteId = ":voteId"}
