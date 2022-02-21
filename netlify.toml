@@ -1,6 +1,6 @@
 [[redirects]]
   from = "*"
-  to = "/redirect"
+  to = "/kakao-oauth"
   query = {code = ":code"}
 
 [[redirects]]
