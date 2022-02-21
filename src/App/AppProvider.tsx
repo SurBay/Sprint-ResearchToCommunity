@@ -97,9 +97,7 @@ export default function AppProvider({ children }: ChildrenProp) {
     // 전체 투표 로드: 현재는 절대적인 투표 수가 적으므로 가능한 방식
     async function getAllVote() {
         await axios
-            .get<VoteProp[]>(`${API_ENDPOINT}/api/votes`, {
-                withCredentials: true,
-            })
+            .get<VoteProp[]>(`${API_ENDPOINT}/api/votes`)
             .then((res) => {
                 allVote.current = res.data;
                 setHotVotes(res.data.slice(0, 1));
@@ -126,7 +124,6 @@ export default function AppProvider({ children }: ChildrenProp) {
                         headers: {
                             Authorization: `Bearer ${jwt}`,
                         },
-                        withCredentials: true,
                     }
                 )
                 .then((res) => {

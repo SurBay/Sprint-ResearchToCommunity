@@ -10,10 +10,7 @@ export function isValidEmail(emailInput: string) {
 
 export async function isUniqueEmail(emailInput: string): Promise<boolean> {
     return await axios
-        .get<boolean>(
-            `${API_ENDPOINT}/api/temp-users/duplicate/${emailInput}`,
-            { withCredentials: true }
-        )
+        .get<boolean>(`${API_ENDPOINT}/api/temp-users/duplicate/${emailInput}`)
         .then((res) => {
             return res.data;
         })
