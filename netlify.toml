@@ -1,6 +1,6 @@
 [[redirects]]
   from = "https://accounts.kakao.com/*"
-  to = "kakao-oauth"
+  to = "https://surbay-sprint.netlify.app/kakao-oauth"
   status = 200
   force = true
   query = {code = ":code"}
