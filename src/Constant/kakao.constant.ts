@@ -9,4 +9,4 @@ export const KAKAO_JAVASCRIPT_KEY = process.env.KAKAO_JAVASCRIPT_KEY || "";
 // const KAKAO_OAUTH_REDIRECT_URL = `http://localhost:3000/kakao-oauth`;
 const KAKAO_OAUTH_REDIRECT_URL = `https://surbay-sprint.netlify.app/kakao-oauth`;
 
-export const KAKAO_OAUTH_REQUST_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_OAUTH_REDIRECT_URL}&response_type=code`;
+export const KAKAO_OAUTH_REQUEST_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_OAUTH_REDIRECT_URL}&response_type=code`;
