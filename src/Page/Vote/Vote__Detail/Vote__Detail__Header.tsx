@@ -26,8 +26,10 @@ export default function VoteDetailHeader() {
 // Header 부분
 const VoteDetailHeaderContainer = styled(FlexSpaceBetweenDiv)`
     height: 60px;
-    padding: 0px 12px;
-    margin-bottom: 40px;
+    padding: 0px 5vw;
+    margin-bottom: 20px;
+    border-bottom: 1px solid
+        ${(props) => props.theme.vote.voteDetailHeaderBorder};
 `;
 
 const VoteAuthorProfileContainer = styled(FlexCenteringDiv)`

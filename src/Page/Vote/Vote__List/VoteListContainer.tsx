@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useAppContext } from "../../../App/AppProvider";
 import VoteListPageHeader from "../../../Component/Header/VoteListPageHeader";
 import VoteEach from "./VoteEach";
+import { getNowInDotForm } from "../../../Util";
 import {
     FullBlockHeaderPageDiv,
     FlexCenteringDiv,
@@ -28,11 +29,17 @@ function HotVote() {
     return (
         <HotVoteContainer>
             <HotVoteTag>HOT</HotVoteTag>
-            {hotVotes.map((vote) => {
-                return (
-                    <VoteEach key={vote._id} vote={vote} showAuthor={false} />
-                );
-            })}
+            <VoteRowsContainer>
+                {hotVotes.map((vote) => {
+                    return (
+                        <VoteEach
+                            key={vote._id}
+                            vote={vote}
+                            showAuthor={false}
+                        />
+                    );
+                })}
+            </VoteRowsContainer>
         </HotVoteContainer>
     );
 }
@@ -44,13 +51,19 @@ function RecentVote() {
         <RecentVoteContainer>
             <RecentVoteTagRow>
                 <RecentVoteTag>최근 게시물</RecentVoteTag>
-                <RecentVoteUpdateTime>업데이트 일시</RecentVoteUpdateTime>
+                <RecentVoteUpdateTime>{getNowInDotForm()}</RecentVoteUpdateTime>
             </RecentVoteTagRow>
-            {recentVotes.map((vote) => {
-                return (
-                    <VoteEach key={vote._id} vote={vote} showAuthor={true} />
-                );
-            })}
+            <VoteRowsContainer>
+                {recentVotes.map((vote) => {
+                    return (
+                        <VoteEach
+                            key={vote._id}
+                            vote={vote}
+                            showAuthor={true}
+                        />
+                    );
+                })}
+            </VoteRowsContainer>
         </RecentVoteContainer>
     );
 }
@@ -84,10 +97,17 @@ function InifiniteScrollPart() {
 }
 
 const Container = styled(FullBlockHeaderPageDiv)`
-    padding: 15px;
+    padding: 25px 5vw;
     * {
         text-decoration: none;
     }
+`;
+
+const VoteRowsContainer = styled.div`
+    border: 1px solid
+        ${(props) => props.theme.vote.voteDetailResultContainerBorder};
+    border-radius: 10px;
+    box-shadow: rgba(156, 156, 156, 0.24) 2px 2px 8px;
 `;
 
 // HOT 투표
@@ -117,12 +137,13 @@ const RecentVoteTagRow = styled(FlexSpaceBetweenDiv)`
 `;
 
 const RecentVoteTag = styled.div`
-    color: ${(props) => props.theme.vote.voteListRecentVoteTagColor};
     font-size: 15px;
+    color: ${(props) => props.theme.vote.voteListRecentVoteTagColor};
 `;
 
 const RecentVoteUpdateTime = styled.div`
     font-size: 12px;
+    color: ${(props) => props.theme.vote.voteListUpdatedTag};
 `;
 
 // IntersectionObserver로 관찰하는 마지막 div

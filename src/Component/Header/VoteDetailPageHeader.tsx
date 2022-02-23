@@ -11,7 +11,7 @@ export default function VoteDetailPageHeader() {
         <Container>
             <BackArrowButton
                 onClick={() => {
-                    navigate(-1);
+                    navigate("/");
                 }}
             >{`<`}</BackArrowButton>
             <StylelessLink to={"/"}>voteboat</StylelessLink>

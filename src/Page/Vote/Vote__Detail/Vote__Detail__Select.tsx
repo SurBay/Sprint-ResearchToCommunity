@@ -65,13 +65,13 @@ const AllVoteOptionContainer = styled.div`
 `;
 
 const VoteOptionContainer = styled(FlexSpaceBetweenDiv)<{ selected: boolean }>`
-    width: 94%;
+    width: 98%;
     height: 56px;
     border: 1px solid
         ${(props) =>
             props.selected
                 ? props.theme.voteOptionSelectedBorderColor
-                : "gray"};
+                : props.theme.vote.voteDetailSelectOptionBorder};
     border-radius: 28px;
     padding: 0px 20px;
     margin: 12px auto;

@@ -90,13 +90,19 @@ const Container = styled.div`
 const AllVoteOptionContainer = styled.div`
     display: block;
     width: 100%;
+    padding: 10px 0px 15px 0px;
+    border: 1px solid
+        ${(props) => props.theme.vote.voteDetailResultContainerBorder};
+    border-radius: 10px;
+    box-shadow: rgba(156, 156, 156, 0.24) 2px 2px 8px;
 `;
 
 const VoteOptionContainer = styled(FlexCenteringDiv)`
     position: relative;
     width: 94%;
     height: 56px;
-    margin: 12px auto;
+    margin: 0px auto;
+    margin-bottom: 12px;
 `;
 
 const VoteOptionContentRow = styled(FlexSpaceBetweenDiv)`

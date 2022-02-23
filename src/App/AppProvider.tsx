@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import toast from "react-hot-toast";
 import { isUserConnectOnMobile, initializeKakaoSDK } from "../Util";
 import { TempUserProp, VoteProp, initialTempUser, ChildrenProp } from "../Type";
 import { API_ENDPOINT } from "../Constant";

@@ -40,6 +40,7 @@ export default function RequestSignupModalProvider({ children }: ChildrenProp) {
 
         const newTempUserInfo: TempUserProp | null = await signup(emailInput);
         if (!newTempUserInfo) return false;
+        console.log(newTempUserInfo.email);
         // 응답이 성공적인 경우 유저 정보 반영하고 쿠키에 저장
         setTempUserInfo(newTempUserInfo);
         setCookie("email", newTempUserInfo.email);
