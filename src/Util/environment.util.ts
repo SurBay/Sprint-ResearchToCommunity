@@ -18,3 +18,11 @@ export function isUserConnectOnMobile() {
     // else
     return false;
 }
+
+export function isUserConnectOnIOS() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (/ip(hone|od|ad)/.test(userAgent)) {
+        return true;
+    }
+    return false;
+}

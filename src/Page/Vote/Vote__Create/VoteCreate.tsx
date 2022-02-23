@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { isUserConnectOnIOS } from "../../../Util";
 import {
     FlexCenteringDiv,
     FullBlockDiv,
@@ -40,7 +41,16 @@ function InfoMessage() {
                 <InfoMessageSurBayAppText>{`SurBay 앱`}</InfoMessageSurBayAppText>
                 <InfoMessageText>{`에서만 가능합니다.`}</InfoMessageText>
             </InfoTextRow>
-            <AppDownloadButton>Download</AppDownloadButton>
+            <a
+                href={
+                    isUserConnectOnIOS()
+                        ? "https://surbay.page.link/naxz"
+                        : "https://surbay.page.link/ZCg5"
+                }
+                style={{ textDecoration: "none" }}
+            >
+                <AppDownloadButton>Download</AppDownloadButton>
+            </a>
         </InfoMessageContainer>
     );
 }
@@ -97,6 +107,7 @@ const AppDownloadButton = styled(StylelessButton)`
     font-size: 4vw;
     color: white;
     background-color: ${(props) => props.theme.color.mainTheme};
+    text-decoration: none;
     padding: 5px 18px;
     border-radius: 15px;
 `;
