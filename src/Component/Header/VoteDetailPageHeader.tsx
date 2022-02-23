@@ -14,8 +14,10 @@ export default function VoteDetailPageHeader() {
                     navigate("/");
                 }}
             >{`<`}</BackArrowButton>
-            <StylelessLink to={"/"}>voteboat</StylelessLink>
-            <SvgIcon src={ProfileIcon} width={"24px"} />
+            <StylelessLink to={"/"}>SurBay</StylelessLink>
+            <StylelessLink to={"/profile"}>
+                <SvgIcon src={ProfileIcon} width={"24px"} />
+            </StylelessLink>
         </Container>
     );
 }

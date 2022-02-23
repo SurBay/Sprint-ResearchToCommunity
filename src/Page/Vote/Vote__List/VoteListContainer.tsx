@@ -35,6 +35,7 @@ function HotVote() {
                         <VoteEach
                             key={vote._id}
                             vote={vote}
+                            showParticipated={true}
                             showAuthor={false}
                         />
                     );
@@ -59,6 +60,7 @@ function RecentVote() {
                         <VoteEach
                             key={vote._id}
                             vote={vote}
+                            showParticipated={true}
                             showAuthor={true}
                         />
                     );
@@ -103,6 +105,7 @@ const Container = styled(FullBlockHeaderPageDiv)`
     }
 `;
 
+// 모든 HOT 투표, 모든 일반 투표를 담는 컨테이너
 const VoteRowsContainer = styled.div`
     border: 1px solid
         ${(props) => props.theme.vote.voteDetailResultContainerBorder};

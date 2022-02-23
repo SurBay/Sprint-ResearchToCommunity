@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const FullFlexHeaderPageDiv = styled.div`
     display: flex;
     width: 100%;
-    ${(props) => `max-height: calc(100% - ${props.theme.headerHeight})`};
+    ${(props) => `height: calc(100% - ${props.theme.headerHeight})`};
     padding-bottom: 30px;
     overflow-y: auto;
     // Edge

@@ -8,7 +8,7 @@ export type TempUserProp = {
 };
 
 export const initialTempUser: TempUserProp = {
-    _id: "initialTempUser",
+    _id: "",
     email: "",
     kakaoId: "",
     jwt: "",

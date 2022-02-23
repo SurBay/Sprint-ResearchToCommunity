@@ -14,7 +14,8 @@ export const Color = {
     title05: "#777777",
     title06: "#888888",
     title07: "#999999",
-    title08: "#CCCCCC",
+    title08: "#B8B8B8",
+    title09: "#CCCCCC",
     // gray
     borderGray01: "#DDDDDD",
     borderGray02: "#F3F3F3",

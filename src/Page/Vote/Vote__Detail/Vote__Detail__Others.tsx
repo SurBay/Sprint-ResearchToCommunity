@@ -11,7 +11,15 @@ export default function VoteDetailOthers() {
             <SeeOtherVoteText>다른 투표 둘러보기</SeeOtherVoteText>
             <OtherVoteRow>
                 <OtherVoteHotTag>HOT</OtherVoteHotTag>
-                <OtherVoteTitle>{hotVote.title}</OtherVoteTitle>
+                {hotVote._id ? (
+                    <OtherVoteTitle>
+                        <StylelessLink to={`/vote/${hotVote._id}`}>
+                            {hotVote.title}
+                        </StylelessLink>
+                    </OtherVoteTitle>
+                ) : (
+                    <OtherVoteTitle>{hotVote.title}</OtherVoteTitle>
+                )}
             </OtherVoteRow>
             <OtherVoteRow>
                 <OtherVoteTag>이전</OtherVoteTag>

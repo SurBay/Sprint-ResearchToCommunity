@@ -299,6 +299,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
 
     // 좋아요 토글
     async function toggleLike() {
+        if (!tempUserInfo._id) return;
         // 로컬 데이터 먼저 변경
         toggleUserLikeInfo();
         const updatedSelectedVote = toggleAndGetVoteLikedInfo();

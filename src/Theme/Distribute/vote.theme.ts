@@ -2,7 +2,7 @@ import { Color } from "../Color";
 
 export const voteTheme = {
     // voteList
-    voteListUpdatedTag: Color.title08,
+    voteListUpdatedTag: Color.title09,
     voteListRecentVoteTagColor: Color.title02,
     //// voteList - voteEach
     voteEachTitleColor: Color.title02,

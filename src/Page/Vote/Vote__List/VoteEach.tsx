@@ -14,9 +14,11 @@ import uncheckIcon from "../../../Resource/svg/unchecked-icon.svg";
 
 export default function VoteEach({
     vote,
+    showParticipated,
     showAuthor,
 }: {
     vote: VoteProp;
+    showParticipated: boolean;
     showAuthor: boolean;
 }) {
     const { tempUserInfo } = useAppContext();
@@ -32,17 +34,21 @@ export default function VoteEach({
                         )}
                     </VoteTitleLeft>
                     <VoteTitleRight>
-                        <SvgIcon
-                            src={
-                                tempUserInfo.participatedVoteIds.includes(
-                                    vote._id
-                                )
-                                    ? checkIcon
-                                    : uncheckIcon
-                            }
-                            width={"4vw"}
-                        />
-                        {` ${getVoteParticipantsNumber(vote)}`}
+                        {showParticipated && (
+                            <>
+                                <SvgIcon
+                                    src={
+                                        tempUserInfo.participatedVoteIds.includes(
+                                            vote._id
+                                        )
+                                            ? checkIcon
+                                            : uncheckIcon
+                                    }
+                                    width={"4vw"}
+                                />
+                                {` ${getVoteParticipantsNumber(vote)}`}
+                            </>
+                        )}
                     </VoteTitleRight>
                 </VoteTitleRow>
                 <VoteContentRow>{vote.content}</VoteContentRow>
