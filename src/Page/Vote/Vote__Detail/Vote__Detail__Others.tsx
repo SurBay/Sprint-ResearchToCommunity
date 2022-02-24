@@ -53,11 +53,13 @@ const VoteDetailOtherContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0px 15px;
-    gap: 10px;
+    gap: 8px;
+    * {
+        font-size: 3.7vw;
+    }
 `;
 
 const SeeOtherVoteText = styled.span`
-    font-size: 16px;
     line-height: 40px;
     color: ${(props) => props.theme.vote.voteOtherHeaderColor};
 `;
@@ -72,9 +74,13 @@ const OtherVoteTag = styled(FlexCenteringDiv)`
     width: 70px;
     height: 100%;
     color: ${(props) => props.theme.vote.voteOtherTagColor};
+    border: 1px solid #eeeeee;
+    border-radius: 15px;
 `;
 
-const OtherVoteHotTag = styled(OtherVoteTag)`
+const OtherVoteHotTag = styled(FlexCenteringDiv)`
+    width: 70px;
+    height: 100%;
     color: white;
     background-color: ${(props) => props.theme.hotTagColor};
     border-radius: 15px;

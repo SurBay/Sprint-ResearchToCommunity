@@ -17,7 +17,7 @@ import {
 import KakaoCommentIcon from "../../../Resource/svg/kakaotalk-comment-icon.svg";
 
 export default function VoteDetailResult() {
-    const { selectedVote } = useVoteDetailContext();
+    const { selectedVote, copyURL } = useVoteDetailContext();
 
     return (
         <Container>
@@ -32,7 +32,7 @@ export default function VoteDetailResult() {
                 })}
             </AllVoteOptionContainer>
             <ShareButtonRow>
-                <URLShareButton>URL 공유</URLShareButton>
+                <URLShareButton onClick={copyURL}>URL 공유</URLShareButton>
                 <KakaoShareButton
                     onClick={() => {
                         sendKakaoFeedMessage(selectedVote);
@@ -68,13 +68,14 @@ function VoteOption({ poll }: { poll: PollProp }) {
                 >{`${pollPercentage}%`}</VoteOptionPercentage>
             </VoteOptionContentRow>
             <VoteResultBarContainer>
-                <VoteResultBar
-                    winning={
-                        getPollParticipantsNumber(poll) >=
-                        getWinningPollParticipantsNumber(selectedVote)
-                    }
-                    percentage={pollPercentage}
-                />
+                <VoteResultBar percentage={`${pollPercentage}%`}>
+                    <VoteResultBarFiller
+                        winning={
+                            getPollParticipantsNumber(poll) >=
+                            getWinningPollParticipantsNumber(selectedVote)
+                        }
+                    />
+                </VoteResultBar>
             </VoteResultBarContainer>
         </VoteOptionContainer>
     );
@@ -132,16 +133,30 @@ const VoteResultBarContainer = styled.div`
 `;
 
 const VoteResultBar = styled.div<{
-    winning: boolean;
-    percentage: number | string;
+    percentage: string;
 }>`
-    ${(props) => `width:${props.percentage}%`};
+    width: ${(props) => props.percentage};
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+`;
+
+const VoteResultBarFiller = styled.div<{ winning: boolean }>`
+    width: 100%;
     height: 100%;
     background-color: ${(props) =>
         props.winning
             ? props.theme.vote.voteDetailResultWinningBarColor
             : props.theme.vote.voteDetailResultBarColor};
-    border-radius: 4px;
+    animation: grow 1s ease;
+    @keyframes grow {
+        0% {
+            width: 0%;
+        }
+        100% {
+            width: 100%;
+        }
+    }
 `;
 
 const ShareButtonRow = styled(FlexSpaceBetweenDiv)`

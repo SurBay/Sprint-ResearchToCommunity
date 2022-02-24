@@ -58,6 +58,7 @@ function InfoMessage() {
 const Container = styled(FullBlockDiv)`
     position: relative;
     padding-top: 180px;
+    overflow: hidden;
 `;
 
 const Cover = styled.div`
@@ -79,6 +80,15 @@ const InfoMessageContainer = styled.div`
     height: 150px;
     background-color: white;
     padding: 10px 15px;
+    animation: slideDown 1s ease;
+    @keyframes slideDown {
+        0% {
+            transform: translateY(-150px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
 `;
 
 const IconWrapper = styled.div``;

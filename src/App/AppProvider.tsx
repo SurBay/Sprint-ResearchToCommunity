@@ -8,7 +8,11 @@ import React, {
 } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { isUserConnectOnMobile, initializeKakaoSDK } from "../Util";
+import {
+    isUserConnectOnMobile,
+    initializeKakaoSDK,
+    isDatePassed,
+} from "../Util";
 import { TempUserProp, VoteProp, initialTempUser, ChildrenProp } from "../Type";
 import { API_ENDPOINT } from "../Constant";
 import { handleAxiosError } from "../Axios/axios.error";
@@ -99,7 +103,7 @@ export default function AppProvider({ children }: ChildrenProp) {
             .get<VoteProp[]>(`${API_ENDPOINT}/api/votes`)
             .then((res) => {
                 allVote.current = res.data;
-                setHotVotes(res.data.slice(0, 1));
+                getHotVotes(res.data.slice(0, 19));
                 setRecentVotes(res.data.slice(0, 9));
                 votePage.current += 1;
             })
@@ -108,6 +112,28 @@ export default function AppProvider({ children }: ChildrenProp) {
             });
         setAllVoteLoaded(true);
         return;
+    }
+
+    // HOT 투표 설정 (클릭 수 높은 순)
+    async function getHotVotes(votes: VoteProp[]) {
+        const liveVotes: VoteProp[] = [];
+        const doneVotes: VoteProp[] = [];
+        votes.forEach((vote) => {
+            if (isDatePassed(vote.deadline)) {
+                doneVotes.push(vote);
+            } else {
+                liveVotes.push(vote);
+            }
+        });
+        liveVotes.sort((a, b) => {
+            if (a.visit > b.visit) return -1;
+            return 1;
+        });
+        doneVotes.sort((a, b) => {
+            if (a.visit > b.visit) return -1;
+            return 1;
+        });
+        setHotVotes([liveVotes[0], liveVotes[1], doneVotes[0]]);
     }
 
     // 쿠키에 사용자 정보가 있는 경우 백엔트에서 사용자 정보를 받아옴

@@ -1,10 +1,11 @@
 import { Color } from "./Color";
-import { kakaoTheme, profileTheme, voteTheme } from "./Distribute";
+import { kakaoTheme, modalTheme, profileTheme, voteTheme } from "./Distribute";
 
 export const Theme = {
     color: Color,
 
     kakao: kakaoTheme,
+    modal: modalTheme,
     profile: profileTheme,
     vote: voteTheme,
 

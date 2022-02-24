@@ -87,6 +87,7 @@ const VoteSubmitButton = styled(StylelessButton)`
     background-color: ${(props) => props.theme.voteSubmitButtonBackgroundColor};
     border-radius: 12px;
     :disabled {
-        background-color: gray;
+        color: #dddddd;
+        background-color: #f5f5f5;
     }
 `;

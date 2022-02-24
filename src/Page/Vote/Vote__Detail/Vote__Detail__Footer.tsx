@@ -48,11 +48,13 @@ const VoteDetailFooterContainer = styled(FlexSpaceBetweenDiv)`
     justify-content: space-between;
     align-items: center;
     padding: 0px 15px;
-    margin-bottom: 45px;
+    padding-bottom: 20px;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #f5f5f5;
 `;
 
 const VoteParticipatesDiv = styled(FlexCenteringDiv)`
-    font-size: 16px;
+    font-size: 3.7vw;
     gap: 8px;
     color: ${(props) => props.theme.vote.voteDetailFooterTextColor};
 `;

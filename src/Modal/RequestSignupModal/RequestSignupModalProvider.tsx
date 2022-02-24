@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { useAppContext } from "../../App/AppProvider";
-import { isUniqueEmail, signup, makeLoginSuccessToast } from "../../Util";
+import { isUniqueEmail, signup, toastSuccessMessage } from "../../Util";
 import { ChildrenProp, TempUserProp } from "../../Type";
 import { useVoteDetailContext } from "../../Page/Vote/Vote__Detail/Vote__DetailProvider";
 
@@ -47,7 +47,7 @@ export default function RequestSignupModalProvider({ children }: ChildrenProp) {
         setCookie("kakaoId", newTempUserInfo.kakaoId);
         setCookie("jwt", newTempUserInfo.jwt);
         closeModal();
-        makeLoginSuccessToast("이메일 로그인이 완료되었습니다");
+        toastSuccessMessage("이메일 로그인이 완료되었습니다");
         return true;
     }
 

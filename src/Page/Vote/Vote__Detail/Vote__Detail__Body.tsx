@@ -48,7 +48,7 @@ export default function VoteDetailBody() {
 const VoteDetailBodyContainer = styled.div`
     display: block;
     padding: 0px 6vw;
-    margin-bottom: 25px;
+    margin-bottom: 35px;
 `;
 
 const VoteTitle = styled.span`
@@ -101,4 +101,7 @@ const VoteDurationDate = styled.span`
     color: ${(props) => props.theme.vote.voteDetailBodyDurationColor};
 `;
 
-const VoteAllowDuplicateCheckText = styled.span``;
+const VoteAllowDuplicateCheckText = styled.span`
+    font-size: 2.8vw;
+    color: ${(props) => props.theme.color.mainTheme};
+`;

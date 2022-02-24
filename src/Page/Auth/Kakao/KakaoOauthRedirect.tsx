@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { makeLoginSuccessToast } from "../../../Util";
+import { toastSuccessMessage } from "../../../Util";
 import { useAppContext } from "../../../App/AppProvider";
 import {
     getKakaoUserInfoFromCode,
@@ -43,14 +43,14 @@ export function KakaoOatuhRedirect() {
         if (tempUserInfo) {
             saveUserInfo(tempUserInfo);
             setTempUserInfo(tempUserInfo);
-            makeLoginSuccessToast("카카오 로그인이 완료되었습니다");
+            toastSuccessMessage("카카오 로그인이 완료되었습니다");
             return;
         }
         const newTempUserInfo = await signupWithKakaoUserInfo(kakaoUserInfo);
         if (newTempUserInfo) {
             saveUserInfo(newTempUserInfo);
             setTempUserInfo(newTempUserInfo);
-            makeLoginSuccessToast("카카오 로그인이 완료되었습니다");
+            toastSuccessMessage("카카오 로그인이 완료되었습니다");
             return;
         }
         // TODO: error message

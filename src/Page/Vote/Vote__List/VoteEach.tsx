@@ -1,14 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { useAppContext } from "../../../App/AppProvider";
-import { getVoteParticipantsNumber, isDatePassed } from "../../../Util";
+import {
+    getVoteParticipantsNumber,
+    getUpcomingVoteDate,
+    isDatePassed,
+} from "../../../Util";
+import { VoteProp } from "../../../Type";
+import { API_ENDPOINT } from "../../../Constant";
 import {
     StylelessLink,
     SvgIcon,
     FlexSpaceBetweenDiv,
     FlexCenteringDiv,
 } from "../../../Style";
-import { VoteProp } from "../../../Type";
 import checkIcon from "../../../Resource/svg/checked-icon.svg";
 import uncheckIcon from "../../../Resource/svg/unchecked-icon.svg";
 
@@ -23,44 +29,58 @@ export default function VoteEach({
 }) {
     const { tempUserInfo } = useAppContext();
 
+    function visitVote(voteId: string) {
+        axios.patch(`${API_ENDPOINT}/api/votes/visit`, {
+            voteId,
+        });
+    }
+
     return (
-        <StylelessLink to={`/vote/${vote._id}`}>
-            <VoteContainer>
-                <VoteTitleRow>
-                    <VoteTitleLeft>
-                        <VoteTitleText>{vote.title}</VoteTitleText>
-                        {isDatePassed(vote.deadline) && (
-                            <VoteDoneTag>마감</VoteDoneTag>
-                        )}
-                    </VoteTitleLeft>
-                    <VoteTitleRight>
-                        {showParticipated && (
-                            <>
-                                <SvgIcon
-                                    src={
-                                        tempUserInfo.participatedVoteIds.includes(
-                                            vote._id
-                                        )
-                                            ? checkIcon
-                                            : uncheckIcon
-                                    }
-                                    width={"4vw"}
-                                />
-                                {` ${getVoteParticipantsNumber(vote)}`}
-                            </>
-                        )}
-                    </VoteTitleRight>
-                </VoteTitleRow>
-                <VoteContentRow>{vote.content}</VoteContentRow>
-                {showAuthor && (
-                    <>
-                        <br />
-                        <VoteAuthorText>{vote.author}</VoteAuthorText>
-                        <VoteCreateText>{`08:55`}</VoteCreateText>
-                    </>
-                )}
-            </VoteContainer>
-        </StylelessLink>
+        <VoteContainer
+            onClick={() => {
+                visitVote(vote._id);
+            }}
+        >
+            <StylelessLink to={`/vote/${vote._id}`}>
+                <>
+                    <VoteTitleRow>
+                        <VoteTitleLeft>
+                            <VoteTitleText>{vote.title}</VoteTitleText>
+                            {isDatePassed(vote.deadline) && (
+                                <VoteDoneTag>마감</VoteDoneTag>
+                            )}
+                        </VoteTitleLeft>
+                        <VoteTitleRight>
+                            {showParticipated && (
+                                <>
+                                    <SvgIcon
+                                        src={
+                                            tempUserInfo.participatedVoteIds.includes(
+                                                vote._id
+                                            )
+                                                ? checkIcon
+                                                : uncheckIcon
+                                        }
+                                        width={"4vw"}
+                                    />
+                                    {` ${getVoteParticipantsNumber(vote)}`}
+                                </>
+                            )}
+                        </VoteTitleRight>
+                    </VoteTitleRow>
+                    <VoteContentRow>{vote.content}</VoteContentRow>
+                    {showAuthor && (
+                        <>
+                            <br />
+                            <VoteAuthorText>{vote.author}</VoteAuthorText>
+                            <VoteCreateText>
+                                {getUpcomingVoteDate(vote.deadline)}
+                            </VoteCreateText>
+                        </>
+                    )}
+                </>
+            </StylelessLink>
+        </VoteContainer>
     );
 }
 

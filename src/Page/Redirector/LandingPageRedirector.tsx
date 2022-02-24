@@ -7,8 +7,9 @@ export function LandingPageRedirector() {
 
     useEffect(() => {
         const redirectVoteId = params.get("voteId");
+        const funnel = params.get("route");
         if (redirectVoteId) {
-            navigate("/", { replace: true, state: redirectVoteId });
+            navigate("/", { replace: true, state: { redirectVoteId } });
         } else {
             navigate("/", { replace: true });
         }

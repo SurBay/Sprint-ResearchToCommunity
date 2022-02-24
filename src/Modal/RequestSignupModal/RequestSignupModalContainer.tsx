@@ -9,6 +9,7 @@ import {
     DefaultModalDiv,
     StylelessButton,
     DefaultInput,
+    FlexCenteringDiv,
 } from "../../Style";
 import KakaoCommentIcon from "../../Resource/svg/kakaotalk-comment-icon.svg";
 
@@ -51,7 +52,29 @@ function GuideTextPart() {
 }
 
 function SampleImagePart() {
-    return <SampleImageDiv></SampleImageDiv>;
+    return (
+        <SampleImagePartContainer>
+            <SampleImageContainer>
+                <SampleVoteTag>내가 참여한 투표</SampleVoteTag>
+                <SampleVoteTitleContainer>
+                    <SampleVoteTitle>
+                        다음 생에 고양이로 태어난다면?
+                    </SampleVoteTitle>
+                </SampleVoteTitleContainer>
+                <SampleVoteTitleContainer>
+                    <SampleVoteTitle>
+                        눈치게임: 남들이 제일 적게 고를 것 같은 숫자는?
+                    </SampleVoteTitle>
+                </SampleVoteTitleContainer>
+                <SampleVoteTitleContainer>
+                    <SampleVoteTitle>겨울철 최강 간식은?</SampleVoteTitle>
+                </SampleVoteTitleContainer>
+                <SampleVoteDot />
+                <SampleVoteDot />
+                <SampleVoteDot />
+            </SampleImageContainer>
+        </SampleImagePartContainer>
+    );
 }
 
 function LoginOptionSelectPart() {
@@ -59,7 +82,7 @@ function LoginOptionSelectPart() {
     const { setSelectUseEmail } = useRequestSignupModalContext();
 
     return (
-        <SelectOptionsDiv>
+        <SelectOptionsPartContainer>
             <KakaoOauthRedirectWrapper>
                 <SelectKakaoLoginButton>
                     <KakaoButtonContent>
@@ -88,7 +111,7 @@ function LoginOptionSelectPart() {
                     다음에 저장할게요
                 </SelectLaterOptionText>
             </SelectLaterOptionTextRow>
-        </SelectOptionsDiv>
+        </SelectOptionsPartContainer>
     );
 }
 
@@ -184,10 +207,59 @@ const EmphasizedGuideText = styled(GuideText)`
 `;
 
 // 샘플 이미지
-const SampleImageDiv = styled(SubContainer)``;
+const SampleImagePartContainer = styled(SubContainer)`
+    height: 100%;
+    padding-bottom: 30px;
+`;
+
+const SampleImageContainer = styled.div`
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: ${(props) =>
+        props.theme.modal.sampleImageBackgroundColor};
+    padding: 20px 15px;
+    border-radius: 15px;
+    overflow: hidden;
+`;
+
+const SampleVoteTag = styled.div`
+    font-size: 3.5vw;
+    color: "#575757";
+    margin-bottom: 20px;
+`;
+
+const SampleVoteTitleContainer = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 95%;
+    background-color: white;
+    padding: 15px 20px;
+    margin: 10px auto;
+    border-radius: 12px;
+`;
+
+const SampleVoteTitle = styled.div`
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    font-size: 3vw;
+    color: "#757575";
+`;
+
+const SampleVoteDot = styled.div`
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    margin: 12px auto;
+    border-radius: 4px;
+`;
 
 // 로그인 옵션들
-const SelectOptionsDiv = styled(SubContainer)``;
+const SelectOptionsPartContainer = styled(SubContainer)``;
 
 const SelectKakaoLoginButton = styled.div`
     display: flex;
@@ -281,6 +353,7 @@ const EmailSubmitButton = styled(StylelessButton)`
         props.theme.emailSubmitButtonBackgroundColor};
     border-radius: 25px;
     :disabled {
-        background-color: gray;
+        color: #cccccc;
+        background-color: #f5f5f5;
     }
 `;

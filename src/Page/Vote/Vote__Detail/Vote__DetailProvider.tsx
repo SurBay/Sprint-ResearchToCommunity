@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAppContext } from "../../../App/AppProvider";
+import { toastSuccessMessage } from "../../../Util";
 import {
     VoteProp,
     AdjoiningVoteProp,
@@ -21,6 +22,7 @@ type VoteDetailContextProp = {
     modalOpened: boolean;
     toggleVoteOption: (optionIndex: number) => void;
     submitVote: () => void;
+    copyURL: () => void;
     toggleLike: () => void;
     closeModal: () => void;
 };
@@ -34,6 +36,7 @@ const InitialVoteDetailContext: VoteDetailContextProp = {
     modalOpened: false,
     toggleVoteOption: () => {},
     submitVote: () => {},
+    copyURL: () => {},
     toggleLike: () => {},
     closeModal: () => {},
 };
@@ -136,7 +139,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         setNextVote(nextVote);
     }
 
-    // 로그인하지 않은 유저 투표 참여 데이터가 있는지 확인
+    // 비로그인 시의 투표 참여 데이터가 있는지 확인
     // 존재한다면 마지막 선택 옵션을 자동으로 선택하고 삭제
     function loadAndApplyParticipatingVoteInfo() {
         const reservedOptions = getCookie("reservedSelectedOptions");
@@ -149,7 +152,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
     //// 임시 저장된 투표 참여 정보 쿠키 삭제
     function clearReservedParticipationCookie() {
         removeCookie("reservedVoteId");
-        // TODO: (bug) #! cookie
+        // TODO: (bug?) #! cookie
         // 쿠키를 제거해도 왜 남아있는거지.. 보험삼아 초기화 함
         setCookie("reservedSelectedOptions", []);
         removeCookie("reservedSelectedOptions");
@@ -297,6 +300,14 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         setCookie("reservedSelectedOptions", selectedOptions);
     }
 
+    // URL 클립보드 복사
+    function copyURL() {
+        const currentPath = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        navigator.clipboard.writeText(currentPath).then(() => {
+            toastSuccessMessage("URL이 클립보드에 복사되었습니다");
+        });
+    }
+
     // 좋아요 토글
     async function toggleLike() {
         if (!tempUserInfo._id) return;
@@ -412,6 +423,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         modalOpened,
         toggleVoteOption,
         submitVote,
+        copyURL,
         toggleLike,
         closeModal,
     };

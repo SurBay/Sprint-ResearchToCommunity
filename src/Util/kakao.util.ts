@@ -26,7 +26,7 @@ export function initializeKakaoSDK() {
 export function sendKakaoFeedMessage(vote: VoteProp) {
     // BEFORE PUBLISH:
     // const sharingURL = `http://localhost:3000/redirect?voteId=${vote._id}`;
-    const sharingURL = `https://surbay-sprint.netlify.app/redirect?voteId=${vote._id}`;
+    const sharingURL = `https://surbay-sprint.netlify.app/redirect?voteId=${vote._id}&route=kakao`;
 
     Kakao.Link.sendDefault({
         objectType: "feed",
