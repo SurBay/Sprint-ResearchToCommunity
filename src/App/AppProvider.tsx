@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import ReactGA from "react-ga";
 import {
     isUserConnectOnMobile,
     initializeKakaoSDK,
@@ -96,7 +97,11 @@ export default function AppProvider({ children }: ChildrenProp) {
         // if (!isUserConnectOnMobile()) {
         //     setConnectOnMobile(false);
         // } else {
-        // 처음 접속하면: 카카오톡 API 사용 설정, 모든 투표 설정, 접속했던 유저 설정
+        // 처음 접속하면: 구글 애널리틱스 사용 설정, 카카오톡 API 사용 설정(index.html 부분의 script), 모든 투표 설정, 접속했던 유저 설정
+        ReactGA.initialize("UA-221434188-1", {
+            debug: true,
+            gaOptions: { userId: "221434188" },
+        });
         initializeKakaoSDK();
         getAllVote();
         getUserInfo();
