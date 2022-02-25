@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import axios from "axios";
+import ReactGA from "react-ga";
 import { useAppContext } from "../../../App/AppProvider";
 import {
     getVoteParticipantsNumber,
@@ -39,6 +40,10 @@ export default function VoteEach({
         <VoteContainer
             onClick={() => {
                 visitVote(vote._id);
+                ReactGA.event({
+                    category: "Vote",
+                    action: "Look Around Other Vote",
+                });
             }}
         >
             <StylelessLink to={`/vote/${vote._id}`}>

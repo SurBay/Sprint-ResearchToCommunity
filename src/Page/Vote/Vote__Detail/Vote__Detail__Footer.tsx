@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ReactGA from "react-ga";
 import { useAppContext } from "../../../App/AppProvider";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import { getVoteParticipantsNumber, getVoteLikedNumber } from "../../../Util";
@@ -33,7 +34,15 @@ export default function VoteDetailFooter() {
                 />
                 {`${getVoteParticipantsNumber(selectedVote)}명 참여`}
             </VoteParticipatesDiv>
-            <VoteLikesDiv onClick={toggleLike}>
+            <VoteLikesDiv
+                onClick={() => {
+                    ReactGA.event({
+                        category: "Like",
+                        action: "Push Like",
+                    });
+                    toggleLike();
+                }}
+            >
                 <ClickableSvgIcon
                     src={
                         tempUserInfo.likedVoteIds.includes(selectedVote._id)

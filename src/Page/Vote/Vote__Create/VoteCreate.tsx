@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import ReactGA from "react-ga";
 import { isUserConnectOnIOS } from "../../../Util";
 import {
     FlexCenteringDiv,
@@ -42,16 +43,25 @@ function InfoMessage() {
                 <InfoMessageSurBayAppText>{`SurBay 앱`}</InfoMessageSurBayAppText>
                 <InfoMessageText>{`에서만 가능합니다.`}</InfoMessageText>
             </InfoTextRow>
-            <a
-                href={
-                    isUserConnectOnIOS()
-                        ? "https://surbay.page.link/naxz"
-                        : "https://surbay.page.link/ZCg5"
-                }
-                style={{ textDecoration: "none" }}
+            <div
+                onClick={() => {
+                    ReactGA.event({
+                        category: "Download",
+                        action: "Push App Download Link",
+                    });
+                }}
             >
-                <AppDownloadButton>Download</AppDownloadButton>
-            </a>
+                <a
+                    href={
+                        isUserConnectOnIOS()
+                            ? "https://surbay.page.link/naxz"
+                            : "https://surbay.page.link/ZCg5"
+                    }
+                    style={{ textDecoration: "none" }}
+                >
+                    <AppDownloadButton>Download</AppDownloadButton>
+                </a>
+            </div>
         </InfoMessageContainer>
     );
 }

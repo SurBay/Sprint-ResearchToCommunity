@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ReactGA from "react-ga";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import { StylelessLink, FlexCenteringDiv } from "../../../Style";
 
@@ -12,7 +13,14 @@ export default function VoteDetailOthers() {
             <OtherVoteRow>
                 <OtherVoteHotTag>HOT</OtherVoteHotTag>
                 {hotVote._id ? (
-                    <OtherVoteTitle>
+                    <OtherVoteTitle
+                        onClick={() => {
+                            ReactGA.event({
+                                category: "Vote",
+                                action: "Look Around Other Vote",
+                            });
+                        }}
+                    >
                         <StylelessLink to={`/vote/${hotVote._id}`}>
                             {hotVote.title}
                         </StylelessLink>
@@ -24,7 +32,14 @@ export default function VoteDetailOthers() {
             <OtherVoteRow>
                 <OtherVoteTag>이전</OtherVoteTag>
                 {prevVote._id ? (
-                    <OtherVoteTitle>
+                    <OtherVoteTitle
+                        onClick={() => {
+                            ReactGA.event({
+                                category: "Vote",
+                                action: "Look Around Other Vote",
+                            });
+                        }}
+                    >
                         <StylelessLink to={`/vote/${prevVote._id}`}>
                             {prevVote.title}
                         </StylelessLink>
@@ -36,7 +51,14 @@ export default function VoteDetailOthers() {
             <OtherVoteRow>
                 <OtherVoteTag>다음</OtherVoteTag>
                 {nextVote._id ? (
-                    <OtherVoteTitle>
+                    <OtherVoteTitle
+                        onClick={() => {
+                            ReactGA.event({
+                                category: "Vote",
+                                action: "Look Around Other Vote",
+                            });
+                        }}
+                    >
                         <StylelessLink to={`/vote/${nextVote._id}`}>
                             {nextVote.title}
                         </StylelessLink>

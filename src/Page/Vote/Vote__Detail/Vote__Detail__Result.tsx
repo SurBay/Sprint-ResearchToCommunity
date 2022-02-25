@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ReactGA from "react-ga";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import {
     sendKakaoFeedMessage,
@@ -35,6 +36,10 @@ export default function VoteDetailResult() {
                 <URLShareButton onClick={copyURL}>URL 공유</URLShareButton>
                 <KakaoShareButton
                     onClick={() => {
+                        ReactGA.event({
+                            category: "Share",
+                            action: "Share Vote on Kakao",
+                        });
                         sendKakaoFeedMessage(selectedVote);
                     }}
                 >
