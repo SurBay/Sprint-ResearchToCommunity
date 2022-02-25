@@ -23,15 +23,17 @@ export default function VoteDetailHeader() {
                     <DateText>{getDotFormDate(selectedVote.date)}</DateText>
                 </AuthorAndDateContainer>
             </VoteAuthorProfileContainer>
-            <IconWrapper onClick={shareURL}>
+            {/* <IconWrapper onClick={shareURL}>
                 <ClickableSvgIcon src={ShareIcon} height={"60%"} />
-            </IconWrapper>
+            </IconWrapper> */}
         </VoteDetailHeaderContainer>
     );
 }
 
 // Header 부분
-const VoteDetailHeaderContainer = styled(FlexSpaceBetweenDiv)`
+const VoteDetailHeaderContainer = styled.div`
+    display: flex;
+    align-items: center;
     height: 60px;
     padding: 0px 5vw;
     margin-bottom: 20px;

@@ -99,7 +99,6 @@ export default function AppProvider({ children }: ChildrenProp) {
         // } else {
         // 처음 접속하면: 구글 애널리틱스 사용 설정, 카카오톡 API 사용 설정(index.html 부분의 script), 모든 투표 설정, 접속했던 유저 설정
         ReactGA.initialize("UA-221434188-1", {
-            debug: true,
             gaOptions: { userId: "221434188" },
         });
         initializeKakaoSDK();
@@ -145,7 +144,14 @@ export default function AppProvider({ children }: ChildrenProp) {
             if (a.visit > b.visit) return -1;
             return 1;
         });
-        setHotVotes([liveVotes[0], liveVotes[1], doneVotes[0]]);
+        setHotVotes([
+            liveVotes[0],
+            liveVotes[1],
+            doneVotes[0],
+            liveVotes[2],
+            liveVotes[3],
+            doneVotes[1],
+        ]);
     }
 
     // 쿠키에 사용자 정보가 있는 경우 백엔트에서 사용자 정보를 받아옴

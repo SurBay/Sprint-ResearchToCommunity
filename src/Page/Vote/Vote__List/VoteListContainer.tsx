@@ -9,6 +9,9 @@ import {
     FlexCenteringDiv,
     FlexSpaceBetweenDiv,
 } from "../../../Style";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.min.css";
+import "swiper/swiper.min.css";
 
 export default function VoteListContainer() {
     return (
@@ -29,7 +32,37 @@ function HotVote() {
     return (
         <HotVoteContainer>
             <HotVoteTag>HOT</HotVoteTag>
-            <VoteRowsContainer>
+            <Swiper>
+                <SwiperSlide>
+                    <VoteRowsContainer>
+                        {hotVotes.slice(0, 3).map((vote) => {
+                            return (
+                                <VoteEach
+                                    key={vote._id}
+                                    vote={vote}
+                                    showParticipated={true}
+                                    showAuthor={false}
+                                />
+                            );
+                        })}
+                    </VoteRowsContainer>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <VoteRowsContainer>
+                        {hotVotes.slice(3, 6).map((vote) => {
+                            return (
+                                <VoteEach
+                                    key={vote._id}
+                                    vote={vote}
+                                    showParticipated={true}
+                                    showAuthor={false}
+                                />
+                            );
+                        })}
+                    </VoteRowsContainer>
+                </SwiperSlide>
+            </Swiper>
+            {/* <VoteRowsContainer>
                 {hotVotes.map((vote) => {
                     return (
                         <VoteEach
@@ -40,7 +73,7 @@ function HotVote() {
                         />
                     );
                 })}
-            </VoteRowsContainer>
+            </VoteRowsContainer> */}
         </HotVoteContainer>
     );
 }

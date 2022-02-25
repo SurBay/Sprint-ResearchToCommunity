@@ -33,7 +33,7 @@ export default function VoteDetailResult() {
                 })}
             </AllVoteOptionContainer>
             <ShareButtonRow>
-                <URLShareButton onClick={copyURL}>URL 공유</URLShareButton>
+                {/* <URLShareButton onClick={copyURL}>URL 공유</URLShareButton> */}
                 <KakaoShareButton
                     onClick={() => {
                         ReactGA.event({
@@ -180,6 +180,7 @@ const URLShareButton = styled(StylelessButton)`
 `;
 
 const KakaoShareButton = styled(URLShareButton)`
+    width: 94%;
     color: black;
     background-color: ${(props) => props.theme.kakao.shareButtonYellow};
 `;
