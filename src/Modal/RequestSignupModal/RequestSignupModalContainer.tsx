@@ -180,7 +180,7 @@ const Container = styled(DefaultModalDiv)<{ selectUseEmail: boolean }>`
     height: 85%;
     border-radius: 15px;
     padding: 15px;
-    overflow: hidden;
+    overflow-y: auto;
 `;
 
 const SubContainer = styled.div`
