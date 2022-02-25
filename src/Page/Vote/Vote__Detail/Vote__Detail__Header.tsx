@@ -2,12 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import { getDotFormDate } from "../../../Util";
-import { SvgIcon, FlexSpaceBetweenDiv, FlexCenteringDiv } from "../../../Style";
+import {
+    SvgIcon,
+    ClickableSvgIcon,
+    FlexSpaceBetweenDiv,
+    FlexCenteringDiv,
+} from "../../../Style";
 import AuthorIcon from "../../../Resource/svg/author-icon.svg";
 import ShareIcon from "../../../Resource/svg/share-icon.svg";
 
 export default function VoteDetailHeader() {
-    const { selectedVote } = useVoteDetailContext();
+    const { selectedVote, shareURL } = useVoteDetailContext();
 
     return (
         <VoteDetailHeaderContainer>
@@ -18,7 +23,9 @@ export default function VoteDetailHeader() {
                     <DateText>{getDotFormDate(selectedVote.date)}</DateText>
                 </AuthorAndDateContainer>
             </VoteAuthorProfileContainer>
-            <SvgIcon src={ShareIcon} height={"60%"} />
+            <IconWrapper onClick={shareURL}>
+                <ClickableSvgIcon src={ShareIcon} height={"60%"} />
+            </IconWrapper>
         </VoteDetailHeaderContainer>
     );
 }
@@ -51,3 +58,5 @@ const DateText = styled.span`
     font-size: 9px;
     color: ${(props) => props.theme.vote.voteDetailHeaderDateColor};
 `;
+
+const IconWrapper = styled.div``;

@@ -26,7 +26,7 @@ export function useRequestSignupModalContext() {
 }
 
 export default function RequestSignupModalProvider({ children }: ChildrenProp) {
-    const { setTempUserInfo, setCookie } = useAppContext();
+    const { landingType, setTempUserInfo, setCookie } = useAppContext();
     const { selectedVote, selectedOptions, closeModal } =
         useVoteDetailContext();
     const [selectUseEmail, setSelectUseEmail] = useState<boolean>(false);
@@ -38,7 +38,10 @@ export default function RequestSignupModalProvider({ children }: ChildrenProp) {
     async function handleEmailSignup(emailInput: string): Promise<boolean> {
         if (!(await isUniqueEmail(emailInput))) return false;
 
-        const newTempUserInfo: TempUserProp | null = await signup(emailInput);
+        const newTempUserInfo: TempUserProp | null = await signup(
+            landingType,
+            emailInput
+        );
         if (!newTempUserInfo) return false;
         console.log(newTempUserInfo.email);
         // 응답이 성공적인 경우 유저 정보 반영하고 쿠키에 저장

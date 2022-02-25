@@ -8,6 +8,7 @@ import {
     StylelessLink,
     StylelessButton,
     SvgIcon,
+    ClickableSvgIcon,
 } from "../../../Style";
 import CloseIcon from "../../../Resource/svg/close-icon.svg";
 import VoteCreatePageImg from "../../../Resource/svg/vote-create-page-img.svg";
@@ -33,7 +34,7 @@ function InfoMessage() {
                         navigate(-1);
                     }}
                 >
-                    <SvgIcon src={CloseIcon} width={"6vw"} />
+                    <ClickableSvgIcon src={CloseIcon} width={"6vw"} />
                 </IconWrapper>
             </CloseIconRow>
             <InfoTextRow>

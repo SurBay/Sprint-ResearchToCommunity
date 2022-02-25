@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { SvgIcon, StylelessLink, DefaultHeaderContainer } from "../../Style";
+import {
+    ClickableSvgIcon,
+    StylelessLink,
+    DefaultHeaderContainer,
+} from "../../Style";
 import HamburgerMenuIcon from "../../Resource/svg/hamburger-menu-icon.svg";
 
 export default function VoteListPageHeader() {
@@ -8,7 +12,7 @@ export default function VoteListPageHeader() {
         <Container>
             <div>투표게시판</div>
             <StylelessLink to={"/profile"}>
-                <SvgIcon src={HamburgerMenuIcon} width={"24px"} />
+                <ClickableSvgIcon src={HamburgerMenuIcon} width={"24px"} />
             </StylelessLink>
         </Container>
     );

@@ -14,7 +14,8 @@ import { TempUserProp } from "../../../Type";
 export function KakaoOatuhRedirect() {
     const [params] = useSearchParams();
     const navigate = useNavigate();
-    const { setTempUserInfo, getCookie, setCookie } = useAppContext();
+    const { landingType, setTempUserInfo, getCookie, setCookie } =
+        useAppContext();
 
     useEffect(() => {
         const code = params.get("code");
@@ -46,7 +47,10 @@ export function KakaoOatuhRedirect() {
             toastSuccessMessage("카카오 로그인이 완료되었습니다");
             return;
         }
-        const newTempUserInfo = await signupWithKakaoUserInfo(kakaoUserInfo);
+        const newTempUserInfo = await signupWithKakaoUserInfo(
+            landingType,
+            kakaoUserInfo
+        );
         if (newTempUserInfo) {
             saveUserInfo(newTempUserInfo);
             setTempUserInfo(newTempUserInfo);

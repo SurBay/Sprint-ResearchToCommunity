@@ -22,6 +22,7 @@ type VoteDetailContextProp = {
     modalOpened: boolean;
     toggleVoteOption: (optionIndex: number) => void;
     submitVote: () => void;
+    shareURL: () => void;
     copyURL: () => void;
     toggleLike: () => void;
     closeModal: () => void;
@@ -36,6 +37,7 @@ const InitialVoteDetailContext: VoteDetailContextProp = {
     modalOpened: false,
     toggleVoteOption: () => {},
     submitVote: () => {},
+    shareURL: () => {},
     copyURL: () => {},
     toggleLike: () => {},
     closeModal: () => {},
@@ -300,9 +302,17 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         setCookie("reservedSelectedOptions", selectedOptions);
     }
 
+    function shareURL() {
+        navigator.share({
+            title: selectedVote.title,
+            text: selectedVote.content,
+            url: `https://surbay-sprint.netlify.app/redirect?voteId=${selectedVote._id}&route=share`,
+        });
+    }
+
     // URL 클립보드 복사
     function copyURL() {
-        const currentPath = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        const currentPath = `https://surbay-sprint.netlify.app/redirect?voteId=${selectedVote._id}&route=copy`;
         navigator.clipboard.writeText(currentPath).then(() => {
             toastSuccessMessage("URL이 클립보드에 복사되었습니다");
         });
@@ -423,6 +433,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         modalOpened,
         toggleVoteOption,
         submitVote,
+        shareURL,
         copyURL,
         toggleLike,
         closeModal,

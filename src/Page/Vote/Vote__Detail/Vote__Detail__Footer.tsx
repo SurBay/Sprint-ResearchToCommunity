@@ -3,7 +3,12 @@ import styled from "styled-components";
 import { useAppContext } from "../../../App/AppProvider";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
 import { getVoteParticipantsNumber, getVoteLikedNumber } from "../../../Util";
-import { SvgIcon, FlexCenteringDiv, FlexSpaceBetweenDiv } from "../../../Style";
+import {
+    SvgIcon,
+    ClickableSvgIcon,
+    FlexCenteringDiv,
+    FlexSpaceBetweenDiv,
+} from "../../../Style";
 import checkIcon from "../../../Resource/svg/checked-icon.svg";
 import uncheckIcon from "../../../Resource/svg/unchecked-icon.svg";
 import filledStarIcon from "../../../Resource/svg/filled-star-icon.svg";
@@ -29,7 +34,7 @@ export default function VoteDetailFooter() {
                 {`${getVoteParticipantsNumber(selectedVote)}명 참여`}
             </VoteParticipatesDiv>
             <VoteLikesDiv onClick={toggleLike}>
-                <SvgIcon
+                <ClickableSvgIcon
                     src={
                         tempUserInfo.likedVoteIds.includes(selectedVote._id)
                             ? filledStarIcon

@@ -17,6 +17,8 @@ import { TempUserProp, VoteProp, initialTempUser, ChildrenProp } from "../Type";
 import { API_ENDPOINT } from "../Constant";
 import { handleAxiosError } from "../Axios/axios.error";
 
+export type LandingType = "kakao" | "paidAd" | "share" | "copy" | "unknown";
+
 type CookieType =
     | "email"
     | "kakaoId"
@@ -25,6 +27,7 @@ type CookieType =
     | "reservedSelectedOptions";
 
 type AppContextProp = {
+    landingType: LandingType;
     tempUserInfo: TempUserProp;
     firstVisitFlag: boolean;
     connectOnMobile: boolean;
@@ -35,6 +38,7 @@ type AppContextProp = {
     getCookie: (name: CookieType) => string | number[];
     setCookie: (name: CookieType, value: string | number[]) => void;
     removeCookie: (name: CookieType) => void;
+    setLandingType: (landingType: LandingType) => void;
     setTempUserInfo: (userInfo: TempUserProp) => void;
     setFirstVisitFlag: (state: boolean) => void;
     loadVote: () => void;
@@ -42,6 +46,7 @@ type AppContextProp = {
 };
 
 const InitialAppContext: AppContextProp = {
+    landingType: "unknown",
     tempUserInfo: initialTempUser,
     firstVisitFlag: true,
     connectOnMobile: true,
@@ -51,6 +56,7 @@ const InitialAppContext: AppContextProp = {
     getCookie: () => "",
     setCookie: () => {},
     removeCookie: () => {},
+    setLandingType: () => {},
     setTempUserInfo: () => {},
     setFirstVisitFlag: () => {},
     loadVote: () => {},
@@ -70,6 +76,7 @@ export default function AppProvider({ children }: ChildrenProp) {
         "reservedVoteId",
         "reservedSelectedOptions",
     ]);
+    const [landingType, setLandingType] = useState<LandingType>("unknown");
     const [tempUserInfo, setTempUserInfo] =
         useState<TempUserProp>(initialTempUser);
     const [firstVisitFlag, setFirstVisitFlag] = useState<boolean>(true);
@@ -211,6 +218,7 @@ export default function AppProvider({ children }: ChildrenProp) {
     }
 
     const appContext = {
+        landingType,
         tempUserInfo,
         firstVisitFlag,
         connectOnMobile,
@@ -221,6 +229,7 @@ export default function AppProvider({ children }: ChildrenProp) {
         getCookie,
         setCookie,
         removeCookie,
+        setLandingType,
         setTempUserInfo,
         setFirstVisitFlag,
         loadVote,

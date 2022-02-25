@@ -2,7 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useVoteDetailContext } from "../../Page/Vote/Vote__Detail/Vote__DetailProvider";
-import { StylelessLink, SvgIcon, DefaultHeaderContainer } from "../../Style";
+import {
+    StylelessLink,
+    ClickableSvgIcon,
+    DefaultHeaderContainer,
+} from "../../Style";
 import ProfileIcon from "../../Resource/svg/profile-icon.svg";
 
 export default function VoteDetailPageHeader() {
@@ -18,7 +22,7 @@ export default function VoteDetailPageHeader() {
             >{`<`}</BackArrowButton>
             <StylelessLink to={"/"}>SurBay</StylelessLink>
             <StylelessLink to={"/profile"}>
-                <SvgIcon src={ProfileIcon} width={"24px"} />
+                <ClickableSvgIcon src={ProfileIcon} width={"24px"} />
             </StylelessLink>
         </Container>
     );

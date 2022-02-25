@@ -1,5 +1,6 @@
 import axios from "axios";
 import { handleAxiosError } from "../Axios/axios.error";
+import { LandingType } from "../App/AppProvider";
 import {
     AccessTokenResponse,
     KakaoUserInfoProp,
@@ -144,12 +145,14 @@ export async function getTempUserInfoByKakaoId(
 }
 
 export async function signupWithKakaoUserInfo(
+    landingType: LandingType,
     kakaoUserInfo: KakaoUserInfoProp
 ): Promise<TempUserProp | null> {
     return await axios
         .post<TempUserProp | null>(
             `${API_ENDPOINT}/api/temp-users/signup-kakao`,
             {
+                landingType,
                 email: kakaoUserInfo.kakao_account?.email,
                 kakaoId: kakaoUserInfo.id,
             }
