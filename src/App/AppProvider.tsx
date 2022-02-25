@@ -18,7 +18,15 @@ import { TempUserProp, VoteProp, initialTempUser, ChildrenProp } from "../Type";
 import { API_ENDPOINT } from "../Constant";
 import { handleAxiosError } from "../Axios/axios.error";
 
-export type LandingType = "kakao" | "paidAd" | "AppNotice" | "unknown";
+export type LandingType =
+    | "paidAd"
+    | "Insta"
+    | "AppNotice"
+    | "PPo"
+    | "koPas"
+    | "kakao"
+    | "EveryTime"
+    | "unknown";
 
 type CookieType =
     | "email"

@@ -15,7 +15,13 @@ export function LandingPageRedirector() {
         axios.patch(`${API_ENDPOINT}/api/funnel`, { landingType });
         if (landingType) {
             switch (landingType) {
-                case "kakao" || "paidAd" || "AppNotice":
+                case "paidAd" ||
+                    "Insta" ||
+                    "AppNotice" ||
+                    "PPo" ||
+                    "koPas" ||
+                    "kakao" ||
+                    "EveryTime":
                     setLandingType(landingType);
                     break;
                 default:
