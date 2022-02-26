@@ -79,7 +79,8 @@ function SampleImagePart() {
 
 function LoginOptionSelectPart() {
     const { closeModal } = useVoteDetailContext();
-    const { setSelectUseEmail } = useRequestSignupModalContext();
+    const { setSelectUseEmail, handleUnLoggedInUserParticipate } =
+        useRequestSignupModalContext();
 
     return (
         <SelectOptionsPartContainer>
@@ -104,7 +105,8 @@ function LoginOptionSelectPart() {
 
             <SelectLaterOptionTextRow>
                 <SelectLaterOptionText
-                    onClick={() => {
+                    onClick={async () => {
+                        await handleUnLoggedInUserParticipate();
                         closeModal();
                     }}
                 >

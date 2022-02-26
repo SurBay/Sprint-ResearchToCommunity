@@ -26,6 +26,8 @@ export type LandingType =
     | "koPas"
     | "kakao"
     | "EveryTime"
+    | "seyoen"
+    | "Dang"
     | "unknown";
 
 type CookieType =
@@ -33,6 +35,7 @@ type CookieType =
     | "kakaoId"
     | "jwt"
     | "reservedVoteId"
+    | "landingType"
     | "reservedSelectedOptions";
 
 type AppContextProp = {
@@ -84,6 +87,7 @@ export default function AppProvider({ children }: ChildrenProp) {
         "jwt",
         "reservedVoteId",
         "reservedSelectedOptions",
+        "landingType",
     ]);
     const [landingType, setLandingType] = useState<LandingType>("unknown");
     const [tempUserInfo, setTempUserInfo] =
@@ -105,13 +109,14 @@ export default function AppProvider({ children }: ChildrenProp) {
         // if (!isUserConnectOnMobile()) {
         //     setConnectOnMobile(false);
         // } else {
-        // 처음 접속하면: 구글 애널리틱스 사용 설정, 카카오톡 API 사용 설정(index.html 부분의 script), 모든 투표 설정, 접속했던 유저 설정
+        // 처음 접속하면: 구글 애널리틱스 사용 설정, 카카오톡 API 사용 설정(index.html 부분의 script), 모든 투표 설정, 접속했던 유저 설정, 유입 경로 설정
         ReactGA.initialize("UA-221434188-1", {
             gaOptions: { userId: "221434188" },
         });
         initializeKakaoSDK();
         getAllVote();
         getUserInfo();
+        getPreviousLandingType();
         // }
         return;
     }, []);
@@ -217,6 +222,11 @@ export default function AppProvider({ children }: ChildrenProp) {
             // allVote 업데이트
             allVote.current[index] = updatedSelectedVote;
         }
+    }
+
+    function getPreviousLandingType() {
+        const previousLandingType = getCookie("landingType");
+        if (previousLandingType) setLandingType(previousLandingType);
     }
 
     // Cookie 관련 함수

@@ -21,6 +21,7 @@ type VoteDetailContextProp = {
     selectedOptions: number[];
     modalOpened: boolean;
     toggleVoteOption: (optionIndex: number) => void;
+    setSelectedVote: (vote: VoteProp) => void;
     submitVote: () => void;
     shareURL: () => void;
     copyURL: () => void;
@@ -36,6 +37,7 @@ const InitialVoteDetailContext: VoteDetailContextProp = {
     selectedOptions: [],
     modalOpened: false,
     toggleVoteOption: () => {},
+    setSelectedVote: () => {},
     submitVote: () => {},
     shareURL: () => {},
     copyURL: () => {},
@@ -432,6 +434,7 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
         selectedOptions,
         modalOpened,
         toggleVoteOption,
+        setSelectedVote,
         submitVote,
         shareURL,
         copyURL,

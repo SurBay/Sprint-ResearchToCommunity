@@ -7,7 +7,7 @@ import { API_ENDPOINT } from "../../Constant";
 export function LandingPageRedirector() {
     const navigate = useNavigate();
     const [params] = useSearchParams();
-    const { setLandingType } = useAppContext();
+    const { setCookie, setLandingType } = useAppContext();
 
     useEffect(() => {
         const redirectVoteId = params.get("voteId");
@@ -21,8 +21,11 @@ export function LandingPageRedirector() {
                     "PPo" ||
                     "koPas" ||
                     "kakao" ||
-                    "EveryTime":
+                    "EveryTime" ||
+                    "seyoen" ||
+                    "Dang":
                     setLandingType(landingType);
+                    setCookie("landingType", landingType);
                     break;
                 default:
                     break;

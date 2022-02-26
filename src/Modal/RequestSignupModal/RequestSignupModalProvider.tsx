@@ -1,13 +1,16 @@
 import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
 import { useAppContext } from "../../App/AppProvider";
 import { isUniqueEmail, signup, toastSuccessMessage } from "../../Util";
 import { ChildrenProp, TempUserProp } from "../../Type";
 import { useVoteDetailContext } from "../../Page/Vote/Vote__Detail/Vote__DetailProvider";
+import { API_ENDPOINT } from "../../Constant";
 
 type RequestSignupModalContextProp = {
     selectUseEmail: boolean;
     setSelectUseEmail: (status: boolean) => void;
     handleEmailSignup: (emailInput: string) => Promise<boolean>;
+    handleUnLoggedInUserParticipate: () => void;
 };
 
 const InitialRequestSignupModalContext: RequestSignupModalContextProp = {
@@ -16,6 +19,7 @@ const InitialRequestSignupModalContext: RequestSignupModalContextProp = {
     handleEmailSignup: () => {
         return new Promise(() => false);
     },
+    handleUnLoggedInUserParticipate: () => {},
 };
 
 const RequestSignupModalContext = createContext(
@@ -26,8 +30,14 @@ export function useRequestSignupModalContext() {
 }
 
 export default function RequestSignupModalProvider({ children }: ChildrenProp) {
-    const { landingType, setTempUserInfo, setCookie } = useAppContext();
-    const { selectedVote, selectedOptions, closeModal } =
+    const {
+        landingType,
+        tempUserInfo,
+        setTempUserInfo,
+        setCookie,
+        applyUpdatedSelectedVote,
+    } = useAppContext();
+    const { selectedVote, selectedOptions, setSelectedVote, closeModal } =
         useVoteDetailContext();
     const [selectUseEmail, setSelectUseEmail] = useState<boolean>(false);
 
@@ -53,10 +63,35 @@ export default function RequestSignupModalProvider({ children }: ChildrenProp) {
         return true;
     }
 
+    // 비로그인 유저 투표 참여
+    async function handleUnLoggedInUserParticipate() {
+        // VoteDetailProvider의 updateUserVoteParticipateInfo() 함수와 같음
+        const updatedUserInfo = { ...tempUserInfo };
+        updatedUserInfo.participatedVoteIds.push(selectedVote._id);
+        setTempUserInfo(updatedUserInfo);
+
+        // VoteDetailProvider의 updateAndReturnSelectedVote() 함수와 같음
+        const updatedSelectedVote = { ...selectedVote };
+        selectedOptions.forEach((optionIndex) => {
+            updatedSelectedVote.polls[optionIndex].participants_userids.push(
+                tempUserInfo.email
+            );
+        });
+        setSelectedVote(updatedSelectedVote);
+        applyUpdatedSelectedVote(updatedSelectedVote);
+
+        await axios.patch(`${API_ENDPOINT}/api/votes/participants`, {
+            voteId: selectedVote._id,
+            email: "NaN",
+            selectedOptions,
+        });
+    }
+
     const requestSignupModalContext = {
         selectUseEmail,
         setSelectUseEmail,
         handleEmailSignup,
+        handleUnLoggedInUserParticipate,
     };
 
     return (
