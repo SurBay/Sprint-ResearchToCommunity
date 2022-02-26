@@ -3,7 +3,11 @@ import styled from "styled-components";
 import ReactGA from "react-ga";
 import { useAppContext } from "../../../App/AppProvider";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
-import { getVoteParticipantsNumber, getVoteLikedNumber } from "../../../Util";
+import {
+    getVoteParticipantsNumber,
+    getVoteLikedNumber,
+    isDatePassed,
+} from "../../../Util";
 import {
     SvgIcon,
     ClickableSvgIcon,
@@ -26,9 +30,9 @@ export default function VoteDetailFooter() {
                     src={
                         tempUserInfo.participatedVoteIds.includes(
                             selectedVote._id
-                        )
-                            ? checkIcon
-                            : uncheckIcon
+                        ) || isDatePassed(selectedVote.deadline)
+                            ? uncheckIcon
+                            : checkIcon
                     }
                     width={"24px"}
                 />

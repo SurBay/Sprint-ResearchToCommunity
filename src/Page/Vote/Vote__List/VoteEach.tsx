@@ -62,9 +62,9 @@ export default function VoteEach({
                                         src={
                                             tempUserInfo.participatedVoteIds.includes(
                                                 vote._id
-                                            )
-                                                ? checkIcon
-                                                : uncheckIcon
+                                            ) || isDatePassed(vote.deadline)
+                                                ? uncheckIcon
+                                                : checkIcon
                                         }
                                         width={"4vw"}
                                     />
