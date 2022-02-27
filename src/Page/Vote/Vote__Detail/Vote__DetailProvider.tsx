@@ -80,6 +80,14 @@ export default function VoteDetailProvider({ children }: ChildrenProp) {
     ///////////////////////////////////////////////////////////
     // useEffect Part
 
+    // 뒤로 가기 버튼 누르면 리스트로 가도록 설정
+    useEffect(() => {
+        window.addEventListener("popstate", () => {
+            navigate("/");
+        });
+        return;
+    }, []);
+
     useEffect(() => {
         if (!voteId) {
             // voteId가 없는 경우 튕겨냄
