@@ -6,6 +6,7 @@ import VoteDetailVoteHeader from "./Vote__Detail__VoteHeader";
 import VoteDetailHeader from "./Vote__Detail__Header";
 import VoteDetailBody from "./Vote__Detail__Body";
 import VoteDetailFooter from "./Vote__Detail__Footer";
+import VoteDetailComment from "./Vote__Detail__Comment";
 import VoteDetailOthers from "./Vote__Detail__Others";
 import InteractionComment from "../../../Component/Interaction.component";
 import ModalWrapper from "../../../Modal/ModalWrapper";
@@ -22,6 +23,7 @@ export default function VoteDetailContainer() {
                 <VoteDetailHeader />
                 <VoteDetailBody />
                 <VoteDetailFooter />
+                <VoteDetailComment />
                 <VoteDetailOthers />
             </Container>
             <InteractionComment />

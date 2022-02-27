@@ -67,7 +67,6 @@ const VoteDetailFooterContainer = styled(FlexSpaceBetweenDiv)`
     align-items: center;
     padding: 0px 15px;
     padding-bottom: 20px;
-    margin-bottom: 15px;
     border-bottom: 3px solid #f5f5f5;
 `;
 
