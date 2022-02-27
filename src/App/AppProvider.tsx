@@ -43,8 +43,9 @@ type AppContextProp = {
     tempUserInfo: TempUserProp;
     firstVisitFlag: boolean;
     connectOnMobile: boolean;
-    allVote?: RefObject<VoteProp[]>;
     allVoteLoaded: boolean;
+    showInteractiveComment: boolean;
+    allVote?: RefObject<VoteProp[]>;
     hotVotes: VoteProp[];
     recentVotes: VoteProp[];
     getCookie: (name: CookieType) => string | number[];
@@ -55,6 +56,7 @@ type AppContextProp = {
     setFirstVisitFlag: (state: boolean) => void;
     loadVote: () => void;
     applyUpdatedSelectedVote: (updatedVote: VoteProp) => void;
+    setShowInteractiveComment: (state: boolean) => void;
 };
 
 const InitialAppContext: AppContextProp = {
@@ -63,6 +65,7 @@ const InitialAppContext: AppContextProp = {
     firstVisitFlag: true,
     connectOnMobile: true,
     allVoteLoaded: false,
+    showInteractiveComment: true,
     hotVotes: [],
     recentVotes: [],
     getCookie: () => "",
@@ -73,6 +76,7 @@ const InitialAppContext: AppContextProp = {
     setFirstVisitFlag: () => {},
     loadVote: () => {},
     applyUpdatedSelectedVote: () => {},
+    setShowInteractiveComment: () => {},
 };
 
 const AppContext = createContext(InitialAppContext);
@@ -99,6 +103,8 @@ export default function AppProvider({ children }: ChildrenProp) {
     const votePage = useRef<number>(0); // InfiniteScroll시 스킵하고 가져올 vote page
     const allVote = useRef<VoteProp[]>([]);
     const [allVoteLoaded, setAllVoteLoaded] = useState<boolean>(false);
+    const [showInteractiveComment, setShowInteractiveComment] =
+        useState<boolean>(true);
 
     /////////////////////////////////////////////////////////////////////
     // useEffect Part
@@ -253,6 +259,7 @@ export default function AppProvider({ children }: ChildrenProp) {
         connectOnMobile,
         allVote,
         allVoteLoaded,
+        showInteractiveComment,
         hotVotes,
         recentVotes,
         getCookie,
@@ -263,6 +270,7 @@ export default function AppProvider({ children }: ChildrenProp) {
         setFirstVisitFlag,
         loadVote,
         applyUpdatedSelectedVote,
+        setShowInteractiveComment,
     };
 
     return (
