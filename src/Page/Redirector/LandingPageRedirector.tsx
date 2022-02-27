@@ -23,7 +23,8 @@ export function LandingPageRedirector() {
                     "kakao" ||
                     "EveryTime" ||
                     "seyoen" ||
-                    "Dang":
+                    "Dang" ||
+                    "etc":
                     setLandingType(landingType);
                     setCookie("landingType", landingType);
                     break;

@@ -28,6 +28,7 @@ export type LandingType =
     | "EveryTime"
     | "seyoen"
     | "Dang"
+    | "etc"
     | "unknown";
 
 type CookieType =
