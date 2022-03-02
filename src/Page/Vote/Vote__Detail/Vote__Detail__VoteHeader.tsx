@@ -72,6 +72,7 @@ const VoteTitle = styled.div`
     width: 80%;
     font-size: 3.5vw;
     color: #666666;
+    padding: 1px 0px;
 `;
 
 const VoteParticipateInfo = styled(FlexCenteringDiv)``;

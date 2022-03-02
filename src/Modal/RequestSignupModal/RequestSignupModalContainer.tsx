@@ -250,6 +250,7 @@ const SampleVoteTitle = styled.div`
     width: 100%;
     font-size: 3vw;
     color: "#757575";
+    padding: 1px 0px;
 `;
 
 const SampleVoteDot = styled.div`
