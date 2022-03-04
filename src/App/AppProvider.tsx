@@ -164,6 +164,7 @@ export default function AppProvider({ children }: ChildrenProp) {
             if (a.visit > b.visit) return -1;
             return 1;
         });
+
         setHotVotes([
             liveVotes[0],
             liveVotes[1],
