@@ -30,7 +30,6 @@ export default function VoteDetailDuration() {
 
 const Container = styled(FlexSpaceBetweenDiv)`
     padding: 0px 6vw;
-    margin-top: 16px;
     margin-bottom: 30px;
 `;
 

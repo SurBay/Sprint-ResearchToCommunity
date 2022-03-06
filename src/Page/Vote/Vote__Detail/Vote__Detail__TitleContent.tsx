@@ -10,7 +10,6 @@ export default function VoteDetailTitleContent() {
             <VoteTitle>{selectedVote.title}</VoteTitle>
             <br />
             <VoteContent>{selectedVote.content}</VoteContent>
-            <br />
         </Container>
     );
 }
@@ -18,7 +17,7 @@ export default function VoteDetailTitleContent() {
 const Container = styled.div`
     display: block;
     padding: 0px 6vw;
-    margin-bottom: 35px;
+    margin-bottom: 10px;
 `;
 
 const VoteTitle = styled.span`

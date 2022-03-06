@@ -7,6 +7,7 @@ import VoteDetailVoteHeader from "./Vote__Detail__VoteHeader";
 import VoteDetailHeader from "./Vote__Detail__Header";
 import VoteDetailTitleContent from "./Vote__Detail__TitleContent";
 import VoteDetailDuration from "./Vote__Detail__Duration";
+import VoteDetailPhoto from "./Vote__Detail__Photo";
 import VoteDetailSelect from "./Vote__Detail__Select";
 import VoteDetailResult from "./Vote__Detail__Result";
 import VoteDetailFooter from "./Vote__Detail__Footer";
@@ -28,6 +29,7 @@ export default function VoteDetailContainer() {
                 <VoteDetailVoteHeader />
                 <VoteDetailHeader />
                 <VoteDetailTitleContent />
+                <VoteDetailPhoto />
                 <VoteDetailDuration />
                 {tempUserInfo.participatedVoteIds.includes(selectedVote._id) ||
                 isDatePassed(selectedVote.deadline) ? (
