@@ -135,7 +135,7 @@ export default function AppProvider({ children }: ChildrenProp) {
             .then((res) => {
                 allVote.current = res.data;
                 getHotVotes(res.data.slice(0, 19));
-                setRecentVotes(res.data.slice(0, 9));
+                setRecentVotes(res.data.slice(0, 10));
                 votePage.current += 1;
             })
             .catch((error) => {

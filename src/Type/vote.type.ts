@@ -42,6 +42,7 @@ export type VoteProp = {
     likedTempUserEmails: string[]; //좋아요 누른 유저들(이메일)
     likedTempUserKakaoIds: string[]; //좋아요 누른 유저들(이메일)
     hide: boolean;
+    with_image: boolean;
     visit: number;
 };
 
@@ -62,6 +63,7 @@ export const initialVote: VoteProp = {
     likedTempUserEmails: [], //좋아요 누른 유저들(이메일)
     likedTempUserKakaoIds: [], //좋아요 누른 유저들(이메일)
     hide: false,
+    with_image: false,
     visit: 0,
 };
 

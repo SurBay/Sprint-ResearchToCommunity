@@ -28,19 +28,19 @@ export default function InteractionComment() {
                     <ClickableSvgIcon src={CloseIcon} height={"100%"} />
                 </div>
             </CommentContainer>
-            <CommentLeg></CommentLeg>
+            <CommentLeg />
         </ContainerRow>
     );
 }
 
 const ContainerRow = styled.div`
     position: absolute;
-    bottom: 0px;
+    bottom: 60px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
-    padding: 8px 2vw;
+    padding: 8px 8vw;
     opacity: 0.78;
 `;
 

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ReactGA from "react-ga";
 import { useVoteDetailContext } from "./Vote__DetailProvider";
+import InteractionComment from "../../../Component/Interaction.component";
 import {
     sendKakaoFeedMessage,
     getVoteParticipantsNumber,
@@ -49,6 +50,7 @@ export default function VoteDetailResult() {
                     </KakaoButtonContent>
                 </KakaoShareButton>
             </ShareButtonRow>
+            <InteractionComment />
         </Container>
     );
 }
@@ -87,6 +89,7 @@ function VoteOption({ poll }: { poll: PollProp }) {
 }
 
 const Container = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
