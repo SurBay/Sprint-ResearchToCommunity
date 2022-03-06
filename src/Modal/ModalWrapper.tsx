@@ -26,6 +26,7 @@ export default function ModalWrapper({
 const ModalOuterContainer = styled(FullFlexDiv)`
     position: absolute;
     top: 0px;
+    z-index: 100;
 `;
 
 const ModalInnerContainer = styled(FullFlexDiv)`
