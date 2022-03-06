@@ -19,9 +19,7 @@ export default function VoteDetailPhoto() {
                     return (
                         <SwiperSlide key={poll.content}>
                             <PhotoContainer>
-                                <a href={poll.image}>
-                                    <Photo src={poll.image} />
-                                </a>
+                                <Photo src={poll.image} />
                             </PhotoContainer>
                         </SwiperSlide>
                     );
