@@ -36,14 +36,16 @@ function HotVote() {
                 <SwiperSlide>
                     <VoteRowsContainer>
                         {hotVotes.slice(0, 3).map((vote) => {
-                            return (
-                                <VoteEach
-                                    key={vote._id}
-                                    vote={vote}
-                                    showParticipated={true}
-                                    showAuthor={false}
-                                />
-                            );
+                            if (vote && "_id" in vote) {
+                                return (
+                                    <VoteEach
+                                        key={vote._id}
+                                        vote={vote}
+                                        showParticipated={true}
+                                        showAuthor={false}
+                                    />
+                                );
+                            }
                         })}
                     </VoteRowsContainer>
                 </SwiperSlide>
